@@ -9,7 +9,7 @@
 ## 技术方案
 - 原生 `HTML + CSS + JavaScript`
 - `Vite` 仅用于本地开发预览和静态构建
-- 本地 JSON 数据源：`/data/movies.json`
+- 本地 JSON 数据源：`/public/data/movies.json`（站点访问路径仍为 `/data/movies.json`）
 
 这套方案对新手友好：
 - 文件结构直接、无框架心智负担
@@ -47,7 +47,7 @@ cp .env.example .env.local
 npm run sync:data
 ```
 
-同步后会覆盖：`/data/movies.json`。
+同步后会覆盖：`/public/data/movies.json`。
 
 ### 3) 自动同步
 
@@ -70,7 +70,7 @@ npm run sync:data
 
 ## 数据维护
 
-电影数据在：`/data/movies.json`
+电影数据在：`/public/data/movies.json`
 
 单条示例结构：
 

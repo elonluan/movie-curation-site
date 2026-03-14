@@ -4,7 +4,7 @@ import path from "node:path";
 
 const DEFAULT_DATABASE_ID = "45324c28-0a20-8356-bdf6-81cbbdd77f76";
 const NOTION_VERSION = "2022-06-28";
-const OUTPUT_PATH = path.resolve(process.cwd(), "data/movies.json");
+const OUTPUT_PATH = path.resolve(process.cwd(), "public/data/movies.json");
 
 const DIMENSION_FIELDS = [
   "沉浸与节奏体感",
@@ -46,7 +46,7 @@ const databaseId = process.env.NOTION_DATABASE_ID || DEFAULT_DATABASE_ID;
 const onlyOnsite = process.env.NOTION_ONLY_ONSITE !== "false";
 
 if (!token) {
-  console.warn("[sync:notion] NOTION_TOKEN 未设置，跳过同步并保留现有 data/movies.json。");
+  console.warn("[sync:notion] NOTION_TOKEN 未设置，跳过同步并保留现有 public/data/movies.json。");
   process.exit(0);
 }
 
