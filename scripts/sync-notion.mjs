@@ -6,21 +6,27 @@ const DEFAULT_DATABASE_ID = "45324c28-0a20-8356-bdf6-81cbbdd77f76";
 const NOTION_VERSION = "2022-06-28";
 const OUTPUT_PATH = path.resolve(process.cwd(), "public/data/movies.json");
 
-const DIMENSION_FIELDS = [
-  "沉浸与节奏体感",
-  "情绪牵引与回响",
-  "共鸣与私人投射",
-  "记忆度与“想再见一次”",
-  "叙事设计与结构控制",
-  "人物系统与表演调度",
-  "视听语言与形式统一",
-  "风格自洽与作者性",
-  "创新与冒险",
-  "思想密度与问题意识",
-  "现实观察与真实性",
-  "文化语境与表达边界",
-  "影响力与作品地位"
-];
+const DIMENSION_KEYS = {
+  personal: {
+    immersion: "沉浸与节奏体感",
+    emotion: "情绪牵引与回响",
+    resonance: "共鸣与私人投射",
+    revisit: "记忆度与“想再见一次”"
+  },
+  art: {
+    narrative: "叙事设计与结构控制",
+    performance: "人物系统与表演调度",
+    audiovisual: "视听语言与形式统一",
+    style: "风格自洽与作者性",
+    innovation: "创新与冒险"
+  },
+  external: {
+    ideas: "思想密度与问题意识",
+    realism: "现实观察与真实性",
+    context: "文化语境与表达边界",
+    influence: "影响力与作品地位"
+  }
+};
 
 const POSTER_TONES = [
   "amber",
@@ -43,7 +49,7 @@ loadEnvFiles([".env.local", ".env"]);
 
 const token = process.env.NOTION_TOKEN;
 const databaseId = process.env.NOTION_DATABASE_ID || DEFAULT_DATABASE_ID;
-const onlyOnsite = process.env.NOTION_ONLY_ONSITE !== "false";
+const onlyOnsite = process.env.NOTION_ONLY_ONSITE === "true";
 
 if (!token) {
   console.warn("[sync:notion] NOTION_TOKEN 未设置，跳过同步并保留现有 public/data/movies.json。");
@@ -61,7 +67,7 @@ console.log(
 async function queryAllMovies({ token: notionToken, databaseId: dbId, onlyOnsite: onlySite }) {
   const url = `https://api.notion.com/v1/databases/${dbId}/query`;
   const pages = [];
-  let nextCursor = undefined;
+  let nextCursor;
 
   do {
     const body = {
@@ -106,12 +112,10 @@ async function queryAllMovies({ token: notionToken, databaseId: dbId, onlyOnsite
 function transformPages(pages) {
   const usedIds = new Set();
 
-  const movies = pages
+  return pages
     .map((page) => toMovie(page, usedIds))
     .filter(Boolean)
     .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
-
-  return movies;
 }
 
 function toMovie(page, usedIds) {
@@ -135,6 +139,10 @@ function toMovie(page, usedIds) {
   });
   const id = ensureUniqueId(baseId, usedIds);
 
+  const dimensionScores = collectDimensionScores(p);
+  const summaryScores = collectSummaryScores(p, dimensionScores);
+  const coreDimension = normalizeCoreDimension(getFormulaString(p["核心维度"])) || inferCoreDimension(summaryScores);
+
   const movie = {
     id,
     titleZh,
@@ -142,12 +150,16 @@ function toMovie(page, usedIds) {
     year: year ?? new Date().getFullYear(),
     country: countryList.join(" / ") || "未知",
     director: director || "未知",
-    rating: deriveRating(p),
+    rating: deriveDisplayRating(summaryScores, p),
     tags: normalizeTags(typeTags),
     logline: getRichText(p["一句话短评"]).trim() || "",
     note: getRichText(p["网站说明"]).trim() || "",
     posterTone: pickPosterTone(id),
-    featured: getCheckbox(p["首页精选"]) || false
+    featured: getCheckbox(p["首页精选"]),
+    onSite: getCheckbox(p["上站"]),
+    coreDimension,
+    summaryScores,
+    dimensionScores
   };
 
   const poster = getFirstFileUrl(p["海报"]);
@@ -156,6 +168,127 @@ function toMovie(page, usedIds) {
   }
 
   return movie;
+}
+
+function collectDimensionScores(properties) {
+  return {
+    personal: {
+      immersion: getNumber(properties[DIMENSION_KEYS.personal.immersion]),
+      emotion: getNumber(properties[DIMENSION_KEYS.personal.emotion]),
+      resonance: getNumber(properties[DIMENSION_KEYS.personal.resonance]),
+      revisit: getNumber(properties[DIMENSION_KEYS.personal.revisit])
+    },
+    art: {
+      narrative: getNumber(properties[DIMENSION_KEYS.art.narrative]),
+      performance: getNumber(properties[DIMENSION_KEYS.art.performance]),
+      audiovisual: getNumber(properties[DIMENSION_KEYS.art.audiovisual]),
+      style: getNumber(properties[DIMENSION_KEYS.art.style]),
+      innovation: getNumber(properties[DIMENSION_KEYS.art.innovation])
+    },
+    external: {
+      ideas: getNumber(properties[DIMENSION_KEYS.external.ideas]),
+      realism: getNumber(properties[DIMENSION_KEYS.external.realism]),
+      context: getNumber(properties[DIMENSION_KEYS.external.context]),
+      influence: getNumber(properties[DIMENSION_KEYS.external.influence])
+    }
+  };
+}
+
+function collectSummaryScores(properties, dims) {
+  const personalSingle =
+    formulaToNumber(properties["个人单项"]) ??
+    weightedSum(dims.personal, { immersion: 6, emotion: 6, resonance: 4, revisit: 4 });
+
+  const artSingle =
+    formulaToNumber(properties["艺术单项"]) ??
+    weightedSum(dims.art, { narrative: 6, performance: 4, audiovisual: 6, style: 2, innovation: 2 });
+
+  const externalSingle =
+    formulaToNumber(properties["外部单项"]) ??
+    weightedSum(dims.external, { ideas: 6, realism: 6, context: 6, influence: 2 });
+
+  const personal =
+    formulaToNumber(properties["个人汇总"]) ??
+    mixWeights(personalSingle, artSingle, externalSingle, { personal: 0.7, art: 0.2, external: 0.1 });
+
+  const art =
+    formulaToNumber(properties["艺术汇总"]) ??
+    mixWeights(personalSingle, artSingle, externalSingle, { personal: 0.3, art: 0.6, external: 0.1 });
+
+  const external =
+    formulaToNumber(properties["外部汇总"]) ??
+    mixWeights(personalSingle, artSingle, externalSingle, { personal: 0.3, art: 0.2, external: 0.5 });
+
+  const total = formulaToNumber(properties["实际总分"]) ?? Math.max(personal, art, external);
+
+  return {
+    personal: normalizePercent(personal),
+    art: normalizePercent(art),
+    external: normalizePercent(external),
+    total: normalizePercent(total),
+    personalSingle: normalizePercent(personalSingle),
+    artSingle: normalizePercent(artSingle),
+    externalSingle: normalizePercent(externalSingle)
+  };
+}
+
+function weightedSum(scores, weights) {
+  let sum = 0;
+  for (const [key, weight] of Object.entries(weights)) {
+    sum += (scores[key] ?? 0) * weight;
+  }
+  return sum;
+}
+
+function mixWeights(personal, art, external, weights) {
+  return personal * weights.personal + art * weights.art + external * weights.external;
+}
+
+function deriveDisplayRating(summaryScores, properties) {
+  const total = summaryScores.total;
+  if (Number.isFinite(total) && total > 0) {
+    return round1(clamp(total / 10, 0, 10));
+  }
+
+  const fallback = normalizeRating(formulaToNumber(properties["实际总分"]));
+  return fallback ?? 0;
+}
+
+function normalizeCoreDimension(value) {
+  if (!value) {
+    return "";
+  }
+
+  if (value.includes("个人")) {
+    return "个人";
+  }
+
+  if (value.includes("艺术")) {
+    return "艺术";
+  }
+
+  if (value.includes("外部")) {
+    return "外部";
+  }
+
+  return "";
+}
+
+function inferCoreDimension(summaryScores) {
+  const pairs = [
+    ["个人", summaryScores.personal],
+    ["艺术", summaryScores.art],
+    ["外部", summaryScores.external]
+  ];
+  pairs.sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0));
+  return pairs[0]?.[0] ?? "";
+}
+
+function normalizePercent(value) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  return round1(clamp(value, 0, 100));
 }
 
 function getTitle(prop) {
@@ -223,6 +356,31 @@ function getFirstFileUrl(prop) {
   return "";
 }
 
+function getFormulaString(prop) {
+  if (!prop || prop.type !== "formula") {
+    return "";
+  }
+
+  const formula = prop.formula;
+  if (!formula) {
+    return "";
+  }
+
+  if (formula.type === "string") {
+    return formula.string ?? "";
+  }
+
+  if (formula.type === "number" && Number.isFinite(formula.number)) {
+    return String(formula.number);
+  }
+
+  if (formula.type === "boolean") {
+    return formula.boolean ? "true" : "false";
+  }
+
+  return "";
+}
+
 function formulaToString(formula) {
   if (!formula) {
     return "";
@@ -276,25 +434,6 @@ function parseNumericText(input) {
 
   const value = Number(match[0]);
   return Number.isFinite(value) ? value : null;
-}
-
-function deriveRating(properties) {
-  const total = normalizeRating(formulaToNumber(properties["实际总分"]));
-  if (total !== null) {
-    return total;
-  }
-
-  const scores = DIMENSION_FIELDS.map((name) => getNumber(properties[name])).filter(
-    (value) => value !== null
-  );
-
-  if (!scores.length) {
-    return 0;
-  }
-
-  const average = scores.reduce((sum, value) => sum + value, 0) / scores.length;
-  const scaled = average <= 5 ? average * 2 : average;
-  return round1(clamp(scaled, 0, 10));
 }
 
 function normalizeRating(value) {

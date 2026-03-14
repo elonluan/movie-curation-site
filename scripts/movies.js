@@ -1,8 +1,17 @@
 import { createMovieCard, loadMovies, mountYear } from "./common.js";
 
+const VIEW_MODES = {
+  tags: "标签索引",
+  core: "分馆浏览"
+};
+
+const CORE_DIMENSIONS = ["全部", "个人", "艺术", "外部"];
+
 const state = {
   movies: [],
-  activeTag: "全部"
+  viewMode: "tags",
+  activeTag: "全部",
+  activeCore: "全部"
 };
 
 function getAllTags(movies) {
@@ -11,41 +20,95 @@ function getAllTags(movies) {
   return ["全部", ...Array.from(tagSet)];
 }
 
-function renderFilters(tags) {
-  const bar = document.querySelector("#filter-bar");
+function renderModeSwitch() {
+  const container = document.querySelector("#view-mode");
+  container.innerHTML = "";
 
-  tags.forEach((tag) => {
+  Object.entries(VIEW_MODES).forEach(([mode, label]) => {
     const button = document.createElement("button");
-    button.className = "filter-btn";
+    button.className = "mode-btn";
     button.type = "button";
-    button.textContent = tag;
-    if (tag === state.activeTag) {
+    button.textContent = label;
+    button.setAttribute("aria-pressed", String(state.viewMode === mode));
+
+    if (state.viewMode === mode) {
       button.classList.add("active");
     }
 
     button.addEventListener("click", () => {
-      state.activeTag = tag;
-      document.querySelectorAll(".filter-btn").forEach((btn) => {
-        btn.classList.toggle("active", btn.textContent === state.activeTag);
-      });
+      state.viewMode = mode;
+      renderModeSwitch();
+      renderFilters();
       renderMovies();
     });
 
-    bar.append(button);
+    container.append(button);
   });
+}
+
+function renderFilters() {
+  const bar = document.querySelector("#filter-bar");
+  bar.innerHTML = "";
+
+  if (state.viewMode === "core") {
+    bar.setAttribute("aria-label", "分馆筛选");
+    renderFilterButtons(bar, CORE_DIMENSIONS, state.activeCore, (value) => {
+      state.activeCore = value;
+      renderFilters();
+      renderMovies();
+    });
+    return;
+  }
+
+  bar.setAttribute("aria-label", "标签筛选");
+  renderFilterButtons(bar, getAllTags(state.movies), state.activeTag, (value) => {
+    state.activeTag = value;
+    renderFilters();
+    renderMovies();
+  });
+}
+
+function renderFilterButtons(container, options, activeValue, onSelect) {
+  options.forEach((value) => {
+    const button = document.createElement("button");
+    button.className = "filter-btn";
+    button.type = "button";
+    button.textContent = value;
+
+    if (value === activeValue) {
+      button.classList.add("active");
+    }
+
+    button.addEventListener("click", () => onSelect(value));
+    container.append(button);
+  });
+}
+
+function getFilteredMovies() {
+  if (state.viewMode === "core") {
+    if (state.activeCore === "全部") {
+      return state.movies;
+    }
+    return state.movies.filter((movie) => movie.coreDimension === state.activeCore);
+  }
+
+  if (state.activeTag === "全部") {
+    return state.movies;
+  }
+
+  return state.movies.filter((movie) => movie.tags.includes(state.activeTag));
 }
 
 function renderMovies() {
   const container = document.querySelector("#movie-grid");
   container.innerHTML = "";
 
-  const filtered =
-    state.activeTag === "全部"
-      ? state.movies
-      : state.movies.filter((movie) => movie.tags.includes(state.activeTag));
+  const filtered = getFilteredMovies();
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div class="empty">当前标签下暂时没有电影。</div>`;
+    const emptyText =
+      state.viewMode === "core" ? "当前分馆下暂时没有电影。" : "当前标签下暂时没有电影。";
+    container.innerHTML = `<div class="empty">${emptyText}</div>`;
     return;
   }
 
@@ -62,12 +125,13 @@ async function initMoviesPage() {
 
   try {
     state.movies = await loadMovies();
-    renderFilters(getAllTags(state.movies));
+    renderModeSwitch();
+    renderFilters();
     renderMovies();
   } catch (error) {
     console.error(error);
     const grid = document.querySelector("#movie-grid");
-    grid.innerHTML = `<div class="empty">电影数据读取失败，请检查 data/movies.json。</div>`;
+    grid.innerHTML = `<div class="empty">电影数据读取失败，请检查 /data/movies.json。</div>`;
   }
 }
 

@@ -65,6 +65,8 @@ function generatePoster(movie) {
 }
 
 export function createMovieCard(movie, { className = "movie-card", withIntro = false } = {}) {
+  const coreTag = movie.coreDimension ? `<span class="tag">分馆·${movie.coreDimension}</span>` : "";
+
   const a = document.createElement("a");
   a.href = `/movie.html?id=${encodeURIComponent(movie.id)}`;
   a.className = className;
@@ -77,6 +79,7 @@ export function createMovieCard(movie, { className = "movie-card", withIntro = f
       <p class="card-subtitle">${movie.titleOriginal}</p>
       <p class="card-year">${movie.year}</p>
       <div class="tag-row">
+        ${coreTag}
         ${movie.tags.slice(0, 3).map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </div>
       ${withIntro ? `<p class="card-subtitle" style="margin-top: 12px;">${movie.logline}</p>` : ""}

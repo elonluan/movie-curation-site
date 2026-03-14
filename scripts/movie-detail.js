@@ -14,6 +14,48 @@ function renderNotFound() {
   `;
 }
 
+function renderSummarySection(movie) {
+  const summary = movie.summaryScores;
+
+  if (!summary || !isFiniteNumber(summary.personal) || !isFiniteNumber(summary.art) || !isFiniteNumber(summary.external)) {
+    return "";
+  }
+
+  const rows = [
+    ["个人向", summary.personal],
+    ["艺术向", summary.art],
+    ["外部向", summary.external]
+  ];
+
+  const bars = rows
+    .map(
+      ([label, score]) => `
+      <div class="score-row">
+        <div class="score-label">${label}</div>
+        <div class="score-track">
+          <div class="score-fill" style="width: ${clamp(score, 0, 100)}%"></div>
+        </div>
+        <div class="score-value">${Number(score).toFixed(1)}</div>
+      </div>
+    `
+    )
+    .join("");
+
+  const core = movie.coreDimension ? `<span class="core-badge">主导维度：${movie.coreDimension}</span>` : "";
+
+  return `
+    <section class="score-panel">
+      <div class="score-panel-head">
+        <h2>三维汇总</h2>
+        ${core}
+      </div>
+      <div class="score-bars">
+        ${bars}
+      </div>
+    </section>
+  `;
+}
+
 function renderMovie(movie) {
   const container = document.querySelector("#movie-detail");
   const tags = movie.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
@@ -33,6 +75,8 @@ function renderMovie(movie) {
           <li><span class="meta-label">导演</span><span class="meta-value">${movie.director}</span></li>
           <li><span class="meta-label">我的评分</span><span class="meta-value">${movie.rating} / 10</span></li>
         </ul>
+
+        ${renderSummarySection(movie)}
 
         <div class="tag-row">${tags}</div>
         <p class="logline">${movie.logline}</p>
@@ -66,6 +110,14 @@ async function initDetailPage() {
     console.error(error);
     renderNotFound();
   }
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function isFiniteNumber(value) {
+  return typeof value === "number" && Number.isFinite(value);
 }
 
 initDetailPage();

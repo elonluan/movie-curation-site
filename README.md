@@ -39,7 +39,7 @@ cp .env.example .env.local
 
 - `NOTION_TOKEN`: Notion integration token（需要对 `Movies Plus` 数据库有读取权限）
 - `NOTION_DATABASE_ID`: 默认已填 `45324c28-0a20-8356-bdf6-81cbbdd77f76`
-- `NOTION_ONLY_ONSITE`: 默认为 `true`，只同步勾选了“上站”的电影
+- `NOTION_ONLY_ONSITE`: 默认为 `false`，全量同步；设为 `true` 才只同步勾选了“上站”的电影
 
 ### 2) 手动同步
 
@@ -67,6 +67,9 @@ npm run sync:data
 - `首页精选` -> `featured`
 - `海报` -> `poster`
 - `实际总分`（或维度均分）-> `rating`
+- `核心维度` -> `coreDimension`
+- `个人汇总/艺术汇总/外部汇总` -> `summaryScores`
+- 13 个维度评分 -> `dimensionScores`
 
 ## 数据维护
 
