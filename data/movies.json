@@ -1,198 +1,360 @@
 [
   {
-    "id": "in-the-mood-for-love",
-    "titleZh": "花样年华",
-    "titleOriginal": "In the Mood for Love",
-    "year": 2000,
-    "country": "中国香港",
-    "director": "王家卫",
-    "rating": 9.2,
-    "tags": ["都市", "情感", "东方色彩"],
-    "logline": "错过被拍成了最缓慢也最热烈的电影。",
-    "note": "雨巷、走廊、旗袍与音乐一起构成了时间的纹理。",
-    "posterTone": "amber",
-    "featured": true
-  },
-  {
-    "id": "mirror",
-    "titleZh": "镜子",
-    "titleOriginal": "Zerkalo",
-    "year": 1975,
-    "country": "苏联",
-    "director": "安德烈·塔可夫斯基",
-    "rating": 9.0,
-    "tags": ["记忆", "诗意", "自传性"],
-    "logline": "记忆不是叙事，而是一种回声。",
-    "note": "现实与梦境之间没有边界，只有不断浮现的画面。",
-    "posterTone": "slate",
-    "featured": true
-  },
-  {
-    "id": "yi-yi",
-    "titleZh": "一一",
-    "titleOriginal": "Yi Yi",
-    "year": 2000,
-    "country": "中国台湾",
-    "director": "杨德昌",
-    "rating": 9.3,
-    "tags": ["家庭", "都市", "成长"],
-    "logline": "同一座城市里，每个人都在学习如何看见别人。",
-    "note": "平静镜头里的情绪起伏，像生活本身那样真实。",
-    "posterTone": "mist",
-    "featured": true
-  },
-  {
-    "id": "tokyo-story",
-    "titleZh": "东京物语",
-    "titleOriginal": "Tokyo Story",
-    "year": 1953,
-    "country": "日本",
-    "director": "小津安二郎",
-    "rating": 9.1,
-    "tags": ["家庭", "时间", "日常"],
-    "logline": "最轻声的叙述，最沉重的告别。",
-    "note": "低机位和留白让每次沉默都变得可感。",
-    "posterTone": "paper",
-    "featured": false
-  },
-  {
-    "id": "persona",
-    "titleZh": "假面",
-    "titleOriginal": "Persona",
-    "year": 1966,
-    "country": "瑞典",
-    "director": "英格玛·伯格曼",
-    "rating": 8.8,
-    "tags": ["心理", "女性", "实验"],
-    "logline": "当语言失效，面孔开始彼此吞没。",
-    "note": "光影、特写与停顿，将身份裂变拍得锋利而冷冽。",
-    "posterTone": "mono",
-    "featured": false
-  },
-  {
-    "id": "still-life",
-    "titleZh": "三峡好人",
-    "titleOriginal": "Still Life",
-    "year": 2006,
-    "country": "中国",
-    "director": "贾樟柯",
-    "rating": 8.7,
-    "tags": ["现实", "空间", "中国当代"],
-    "logline": "在被拆除的城市里，人与关系都在重新定位。",
-    "note": "纪录质感与诗意瞬间交叠，形成独特的时间感。",
-    "posterTone": "rust",
-    "featured": true
-  },
-  {
-    "id": "memories-of-murder",
-    "titleZh": "杀人回忆",
-    "titleOriginal": "Memories of Murder",
-    "year": 2003,
-    "country": "韩国",
-    "director": "奉俊昊",
-    "rating": 8.9,
-    "tags": ["悬疑", "社会", "黑色幽默"],
-    "logline": "案件悬而未决，时代的阴影却越来越清晰。",
-    "note": "类型片框架里包裹的是对制度与人性的凝视。",
-    "posterTone": "forest",
-    "featured": false
-  },
-  {
-    "id": "la-dolce-vita",
-    "titleZh": "甜蜜的生活",
-    "titleOriginal": "La Dolce Vita",
-    "year": 1960,
-    "country": "意大利",
-    "director": "费德里科·费里尼",
-    "rating": 8.6,
-    "tags": ["都市", "现代性", "黑白影像"],
-    "logline": "狂欢越盛大，虚无越清晰。",
-    "note": "摄影机在上流社交场里游走，像一次优雅的审判。",
-    "posterTone": "charcoal",
-    "featured": false
-  },
-  {
-    "id": "cleo-from-5-to-7",
-    "titleZh": "五至七时的克莱奥",
-    "titleOriginal": "Cléo de 5 à 7",
-    "year": 1962,
-    "country": "法国",
-    "director": "阿涅斯·瓦尔达",
-    "rating": 8.7,
-    "tags": ["女性", "城市漫游", "新浪潮"],
-    "logline": "两个小时的现实时间，完成一次自我重建。",
-    "note": "轻盈机位与街道声响，让存在焦虑有了可触摸的形状。",
-    "posterTone": "rose",
-    "featured": false
-  },
-  {
-    "id": "the-double-life-of-veronique",
-    "titleZh": "维罗妮卡的双重生命",
-    "titleOriginal": "The Double Life of Véronique",
-    "year": 1991,
-    "country": "法国 / 波兰",
-    "director": "克日什托夫·基耶斯洛夫斯基",
-    "rating": 8.9,
-    "tags": ["神秘", "女性", "色彩"],
-    "logline": "命运像一根看不见的线，牵引两个互不相识的人。",
-    "note": "金绿色调和音乐共同制造了朦胧的宿命感。",
-    "posterTone": "olive",
-    "featured": false
-  },
-  {
-    "id": "paris-texas",
-    "titleZh": "巴黎，德州",
-    "titleOriginal": "Paris, Texas",
-    "year": 1984,
-    "country": "西德 / 法国",
-    "director": "维姆·文德斯",
-    "rating": 8.8,
-    "tags": ["公路", "亲情", "孤独"],
-    "logline": "在漫长的回程中，沉默终于找到语言。",
-    "note": "荒原与霓虹并置，情感像地平线一样缓慢展开。",
-    "posterTone": "sunset",
-    "featured": false
-  },
-  {
-    "id": "pather-panchali",
-    "titleZh": "大地之歌",
-    "titleOriginal": "Pather Panchali",
-    "year": 1955,
-    "country": "印度",
-    "director": "萨蒂亚吉特·雷伊",
-    "rating": 8.9,
-    "tags": ["成长", "乡村", "新现实主义"],
-    "logline": "贫困并不取消诗意，反而让日常更有重量。",
-    "note": "孩童视角与自然声音，让世界重新变得具体。",
-    "posterTone": "earth",
-    "featured": false
-  },
-  {
-    "id": "red-desert",
-    "titleZh": "红色沙漠",
-    "titleOriginal": "Il deserto rosso",
-    "year": 1964,
-    "country": "意大利",
-    "director": "米开朗基罗·安东尼奥尼",
-    "rating": 8.5,
-    "tags": ["工业景观", "疏离", "色彩"],
-    "logline": "工业雾霾里，情绪被涂成了冷色。",
-    "note": "空间构图像心理剖面图，人物总在边缘徘徊。",
+    "id": "movie-06f24c28-2025",
+    "titleZh": "浪浪山小妖怪",
+    "titleOriginal": "浪浪山小妖怪",
+    "year": 2025,
+    "country": "中国大陆",
+    "director": "Shui Yu",
+    "rating": 9,
+    "tags": [
+      "剧情",
+      "动画"
+    ],
+    "logline": "",
+    "note": "",
     "posterTone": "oxide",
-    "featured": false
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/apsSI17p3x5xbinfvo5SpJlaqNQ.jpg"
   },
   {
-    "id": "close-up",
-    "titleZh": "特写",
-    "titleOriginal": "Close-Up",
-    "year": 1990,
-    "country": "伊朗",
-    "director": "阿巴斯·基亚罗斯塔米",
+    "id": "movie-5f924c28-2024",
+    "titleZh": "姥姥的外孙",
+    "titleOriginal": "หลานม่า",
+    "year": 2024,
+    "country": "泰国",
+    "director": "Pat Boonnitipat",
     "rating": 8.8,
-    "tags": ["纪录与虚构", "身份", "电影关于电影"],
-    "logline": "表演与真实互为镜像，电影成为审判现场。",
-    "note": "非职业演员与再现段落叠加，现实被重新命名。",
+    "tags": [
+      "剧情",
+      "家庭"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "rust",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/9Xa0Grd2jq2lM2gqcoTB4F9TjMd.jpg"
+  },
+  {
+    "id": "memoir-of-a-snail-2024",
+    "titleZh": "蜗牛回忆录",
+    "titleOriginal": "Memoir of a Snail",
+    "year": 2024,
+    "country": "澳大利亚",
+    "director": "Adam Elliot",
+    "rating": 8.8,
+    "tags": [
+      "剧情",
+      "动画"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "sunset",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/woaN8CbloH0akyX0E72ayxlJAB4.jpg"
+  },
+  {
+    "id": "c-ancora-domani-2023",
+    "titleZh": "还有明天",
+    "titleOriginal": "C'è ancora domani",
+    "year": 2023,
+    "country": "意大利",
+    "director": "Paola Cortellesi",
+    "rating": 8.7,
+    "tags": [
+      "剧情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "olive",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/4Hi7yjiQjokEDStT1MOj5rPgRfW.jpg"
+  },
+  {
+    "id": "movie-c9924c28-2023",
+    "titleZh": "怪物",
+    "titleOriginal": "怪物",
+    "year": 2023,
+    "country": "日本",
+    "director": "Hirokazu Kore-eda",
+    "rating": 8.8,
+    "tags": [
+      "剧情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "earth",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/9Oy2cAZilV2MFEd8C9UE7rWcThg.jpg"
+  },
+  {
+    "id": "manchester-by-the-sea-2016",
+    "titleZh": "海边的曼彻斯特",
+    "titleOriginal": "Manchester by the Sea",
+    "year": 2016,
+    "country": "美国",
+    "director": "Kenneth Lonergan",
+    "rating": 9.2,
+    "tags": [
+      "剧情",
+      "家庭"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "forest",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/o9VXYOuaJxCEKOxbA86xqtwmqYn.jpg"
+  },
+  {
+    "id": "life-of-pi-2012",
+    "titleZh": "少年派的奇幻漂流",
+    "titleOriginal": "Life of Pi",
+    "year": 2012,
+    "country": "美国 / 中国台湾 / 英国 / 加拿大",
+    "director": "Ang Lee",
+    "rating": 8.8,
+    "tags": [
+      "剧情",
+      "奇幻",
+      "冒险"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "rose",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/iLgRu4hhSr6V1uManX6ukDriiSc.jpg"
+  },
+  {
+    "id": "detachment-2011",
+    "titleZh": "超脱",
+    "titleOriginal": "Detachment",
+    "year": 2011,
+    "country": "美国",
+    "director": "Tony Kaye",
+    "rating": 8.8,
+    "tags": [
+      "剧情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "mist",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/bC5H2dabnHrQJD1KmQUSUUeuCXU.jpg"
+  },
+  {
+    "id": "movie-97b24c28-2011",
+    "titleZh": "熔炉",
+    "titleOriginal": "도가니",
+    "year": 2011,
+    "country": "韩国",
+    "director": "Hwang Dong-hyuk",
+    "rating": 8.6,
+    "tags": [
+      "剧情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "charcoal",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/mbMp0oIFmYnw0i5gzRoKt8cH5ve.jpg"
+  },
+  {
+    "id": "mary-and-max-2009",
+    "titleZh": "玛丽与麦克斯",
+    "titleOriginal": "Mary and Max",
+    "year": 2009,
+    "country": "澳大利亚 / 美国",
+    "director": "Adam Elliot",
+    "rating": 9.2,
+    "tags": [
+      "动画"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "mist",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/ebmsM382m9IClLUzKYY2U5biFwM.jpg"
+  },
+  {
+    "id": "lust-caution-2007",
+    "titleZh": "色，戒",
+    "titleOriginal": "Lust, Caution",
+    "year": 2007,
+    "country": "中国台湾",
+    "director": "Ang Lee",
+    "rating": 8.7,
+    "tags": [
+      "剧情",
+      "战争"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "forest",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/6c1tqfJEBuIyhQC19SLlLQAUAvJ.jpg"
+  },
+  {
+    "id": "brokeback-mountain-2005",
+    "titleZh": "断背山",
+    "titleOriginal": "Brokeback Mountain",
+    "year": 2005,
+    "country": "美国",
+    "director": "Ang Lee",
+    "rating": 9.4,
+    "tags": [
+      "剧情",
+      "爱情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "oxide",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/aByfQOQBNa4CMFwIgq3QrqY2ZHh.jpg"
+  },
+  {
+    "id": "the-pianist-2002",
+    "titleZh": "钢琴家",
+    "titleOriginal": "The Pianist",
+    "year": 2002,
+    "country": "英国 / 法国 / 波兰 / 德国 / 美国",
+    "director": "Roman Polanski",
+    "rating": 8.6,
+    "tags": [
+      "历史",
+      "战争",
+      "传记",
+      "音乐"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "paper",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg"
+  },
+  {
+    "id": "movie-8a524c28-2002",
+    "titleZh": "无间道",
+    "titleOriginal": "無間道",
+    "year": 2002,
+    "country": "中国香港",
+    "director": "Alan Mak Siu-Fai, Andrew Lau Wai-Keung",
+    "rating": 8.8,
+    "tags": [
+      "剧情",
+      "犯罪",
+      "悬疑"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "earth",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/gix9thDBXfjJ8M7rYbihqbQGBcP.jpg"
+  },
+  {
+    "id": "good-will-hunting-1997",
+    "titleZh": "心灵捕手",
+    "titleOriginal": "Good Will Hunting",
+    "year": 1997,
+    "country": "美国",
+    "director": "Gus Van Sant",
+    "rating": 9,
+    "tags": [
+      "剧情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "charcoal",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/z2FnLKpFi1HPO7BEJxdkv6hpJSU.jpg"
+  },
+  {
+    "id": "movie-e7124c28-1994",
+    "titleZh": "饮食男女",
+    "titleOriginal": "飲食男女",
+    "year": 1994,
+    "country": "中国台湾 / 美国",
+    "director": "Ang Lee",
+    "rating": 9.1,
+    "tags": [
+      "剧情",
+      "家庭"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "olive",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/ktdCBg2Xq2Ry0fuJYT4izktM2Hg.jpg"
+  },
+  {
+    "id": "movie-ecb24c28-1993",
+    "titleZh": "喜宴",
+    "titleOriginal": "囍宴",
+    "year": 1993,
+    "country": "中国台湾 / 美国",
+    "director": "Ang Lee",
+    "rating": 8.8,
+    "tags": [
+      "剧情",
+      "家庭"
+    ],
+    "logline": "",
+    "note": "",
     "posterTone": "ink",
-    "featured": false
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/arWCA8lg0rbdlwHUMvI46LNDhnL.jpg"
+  },
+  {
+    "id": "dead-poets-society-1989",
+    "titleZh": "死亡诗社",
+    "titleOriginal": "Dead Poets Society",
+    "year": 1989,
+    "country": "美国",
+    "director": "Peter Weir",
+    "rating": 9.1,
+    "tags": [
+      "剧情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "ink",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/erzbMlcNHOdx24AXOcn2ZKA7R1q.jpg"
+  },
+  {
+    "id": "maurice-1987",
+    "titleZh": "莫里斯",
+    "titleOriginal": "Maurice",
+    "year": 1987,
+    "country": "英国",
+    "director": "James Ivory",
+    "rating": 8.5,
+    "tags": [
+      "剧情",
+      "爱情"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "rose",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/8HhCyxxzoUqEBmVGK25Jq69LhVo.jpg"
+  },
+  {
+    "id": "movie-e6c24c28-1986",
+    "titleZh": "天空之城",
+    "titleOriginal": "天空の城ラピュタ",
+    "year": 1986,
+    "country": "日本",
+    "director": "Hayao Miyazaki",
+    "rating": 8.9,
+    "tags": [
+      "动画",
+      "奇幻",
+      "冒险"
+    ],
+    "logline": "",
+    "note": "",
+    "posterTone": "ink",
+    "featured": false,
+    "poster": "https://image.tmdb.org/t/p/original/41XxSsJc5OrulP0m7TrrUeO2hoz.jpg"
   }
 ]

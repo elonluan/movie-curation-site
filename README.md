@@ -25,6 +25,49 @@ npm run dev
 
 默认开发地址：`http://localhost:5173`
 
+## 对接 Notion（Movies Plus）
+
+项目已接入 Notion 构建前同步脚本：`/scripts/sync-notion.mjs`。
+
+### 1) 配置环境变量
+
+复制配置模板并填写 token：
+
+```bash
+cp .env.example .env.local
+```
+
+- `NOTION_TOKEN`: Notion integration token（需要对 `Movies Plus` 数据库有读取权限）
+- `NOTION_DATABASE_ID`: 默认已填 `45324c28-0a20-8356-bdf6-81cbbdd77f76`
+- `NOTION_ONLY_ONSITE`: 默认为 `true`，只同步勾选了“上站”的电影
+
+### 2) 手动同步
+
+```bash
+npm run sync:data
+```
+
+同步后会覆盖：`/data/movies.json`。
+
+### 3) 自动同步
+
+- `npm run dev` 前会自动执行一次 `sync:data`
+- `npm run build` 前也会自动执行一次 `sync:data`
+
+### Notion 字段映射
+
+- `电影名` -> `titleZh`
+- `原文片名` -> `titleOriginal`
+- `年份` -> `year`
+- `地区` -> `country`
+- `导演` -> `director`
+- `类型` -> `tags`
+- `一句话短评` -> `logline`
+- `网站说明` -> `note`
+- `首页精选` -> `featured`
+- `海报` -> `poster`
+- `实际总分`（或维度均分）-> `rating`
+
 ## 数据维护
 
 电影数据在：`/data/movies.json`
