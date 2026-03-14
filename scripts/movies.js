@@ -1,17 +1,16 @@
 import { createMovieCard, loadMovies, mountYear } from "./common.js";
 
-const VIEW_MODES = {
-  tags: "标签索引",
-  core: "分馆浏览"
-};
-
-const CORE_DIMENSIONS = ["全部", "个人", "艺术", "外部"];
+const SCORE_SORT_OPTIONS = [
+  { key: "total", label: "最终得分" },
+  { key: "personal", label: "个人维度" },
+  { key: "art", label: "艺术维度" },
+  { key: "external", label: "外部维度" }
+];
 
 const state = {
   movies: [],
-  viewMode: "tags",
   activeTag: "全部",
-  activeCore: "全部"
+  scoreSort: "total"
 };
 
 function getAllTags(movies) {
@@ -20,104 +19,126 @@ function getAllTags(movies) {
   return ["全部", ...Array.from(tagSet)];
 }
 
-function renderModeSwitch() {
-  const container = document.querySelector("#view-mode");
-  container.innerHTML = "";
+function renderTagFilters() {
+  const bar = document.querySelector("#tag-filter-bar");
+  bar.innerHTML = "";
 
-  Object.entries(VIEW_MODES).forEach(([mode, label]) => {
+  getAllTags(state.movies).forEach((tag) => {
     const button = document.createElement("button");
-    button.className = "mode-btn";
+    button.className = "filter-btn";
     button.type = "button";
-    button.textContent = label;
-    button.setAttribute("aria-pressed", String(state.viewMode === mode));
+    button.textContent = tag;
 
-    if (state.viewMode === mode) {
+    if (tag === state.activeTag) {
       button.classList.add("active");
     }
 
     button.addEventListener("click", () => {
-      state.viewMode = mode;
-      renderModeSwitch();
-      renderFilters();
-      renderMovies();
+      state.activeTag = tag;
+      renderTagFilters();
+      renderTagHall();
     });
 
-    container.append(button);
+    bar.append(button);
   });
 }
 
-function renderFilters() {
-  const bar = document.querySelector("#filter-bar");
+function renderScoreSortControls() {
+  const bar = document.querySelector("#score-sort-bar");
   bar.innerHTML = "";
 
-  if (state.viewMode === "core") {
-    bar.setAttribute("aria-label", "分馆筛选");
-    renderFilterButtons(bar, CORE_DIMENSIONS, state.activeCore, (value) => {
-      state.activeCore = value;
-      renderFilters();
-      renderMovies();
-    });
-    return;
-  }
-
-  bar.setAttribute("aria-label", "标签筛选");
-  renderFilterButtons(bar, getAllTags(state.movies), state.activeTag, (value) => {
-    state.activeTag = value;
-    renderFilters();
-    renderMovies();
-  });
-}
-
-function renderFilterButtons(container, options, activeValue, onSelect) {
-  options.forEach((value) => {
+  SCORE_SORT_OPTIONS.forEach((option) => {
     const button = document.createElement("button");
     button.className = "filter-btn";
     button.type = "button";
-    button.textContent = value;
+    button.textContent = option.label;
 
-    if (value === activeValue) {
+    if (option.key === state.scoreSort) {
       button.classList.add("active");
     }
 
-    button.addEventListener("click", () => onSelect(value));
-    container.append(button);
+    button.addEventListener("click", () => {
+      state.scoreSort = option.key;
+      renderScoreSortControls();
+      renderScoreHall();
+    });
+
+    bar.append(button);
   });
 }
 
-function getFilteredMovies() {
-  if (state.viewMode === "core") {
-    if (state.activeCore === "全部") {
-      return state.movies;
-    }
-    return state.movies.filter((movie) => movie.coreDimension === state.activeCore);
-  }
+function renderTagHall() {
+  const filtered =
+    state.activeTag === "全部"
+      ? state.movies
+      : state.movies.filter((movie) => movie.tags.includes(state.activeTag));
 
-  if (state.activeTag === "全部") {
-    return state.movies;
-  }
-
-  return state.movies.filter((movie) => movie.tags.includes(state.activeTag));
+  renderCards("#tag-grid", filtered, "当前标签下暂时没有电影。");
 }
 
-function renderMovies() {
-  const container = document.querySelector("#movie-grid");
+function renderCalendarHall() {
+  const sorted = [...state.movies].sort((a, b) => {
+    return getWatchDateTimestamp(b) - getWatchDateTimestamp(a);
+  });
+
+  renderCards("#calendar-grid", sorted, "暂无可展示的观影日历。");
+}
+
+function renderScoreHall() {
+  const sorted = [...state.movies].sort((a, b) => {
+    const scoreDelta = getScoreByMode(b, state.scoreSort) - getScoreByMode(a, state.scoreSort);
+    if (scoreDelta !== 0) {
+      return scoreDelta;
+    }
+    return getWatchDateTimestamp(b) - getWatchDateTimestamp(a);
+  });
+
+  renderCards("#score-grid", sorted, "暂无可展示的评分数据。");
+}
+
+function renderCards(selector, movies, emptyText) {
+  const container = document.querySelector(selector);
   container.innerHTML = "";
 
-  const filtered = getFilteredMovies();
-
-  if (filtered.length === 0) {
-    const emptyText =
-      state.viewMode === "core" ? "当前分馆下暂时没有电影。" : "当前标签下暂时没有电影。";
+  if (!movies.length) {
     container.innerHTML = `<div class="empty">${emptyText}</div>`;
     return;
   }
 
-  filtered.forEach((movie, index) => {
+  movies.forEach((movie, index) => {
     const card = createMovieCard(movie);
     card.classList.add("reveal");
-    card.style.animationDelay = `${index * 50}ms`;
+    card.style.animationDelay = `${index * 35}ms`;
     container.append(card);
   });
+}
+
+function getScoreByMode(movie, mode) {
+  const summary = movie.summaryScores ?? {};
+
+  if (mode === "personal") {
+    return safeNumber(summary.personal);
+  }
+  if (mode === "art") {
+    return safeNumber(summary.art);
+  }
+  if (mode === "external") {
+    return safeNumber(summary.external);
+  }
+
+  return safeNumber(summary.total) || safeNumber(movie.rating) * 10;
+}
+
+function getWatchDateTimestamp(movie) {
+  if (!movie.watchDate) {
+    return Number.NEGATIVE_INFINITY;
+  }
+  const ts = Date.parse(movie.watchDate);
+  return Number.isFinite(ts) ? ts : Number.NEGATIVE_INFINITY;
+}
+
+function safeNumber(value) {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
 async function initMoviesPage() {
@@ -125,13 +146,19 @@ async function initMoviesPage() {
 
   try {
     state.movies = await loadMovies();
-    renderModeSwitch();
-    renderFilters();
-    renderMovies();
+    renderTagFilters();
+    renderTagHall();
+    renderCalendarHall();
+    renderScoreSortControls();
+    renderScoreHall();
   } catch (error) {
     console.error(error);
-    const grid = document.querySelector("#movie-grid");
-    grid.innerHTML = `<div class="empty">电影数据读取失败，请检查 /data/movies.json。</div>`;
+    ["#tag-grid", "#calendar-grid", "#score-grid"].forEach((selector) => {
+      const container = document.querySelector(selector);
+      if (container) {
+        container.innerHTML = `<div class="empty">电影数据读取失败，请检查 /data/movies.json。</div>`;
+      }
+    });
   }
 }
 

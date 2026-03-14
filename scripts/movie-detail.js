@@ -59,6 +59,8 @@ function renderSummarySection(movie) {
 function renderMovie(movie) {
   const container = document.querySelector("#movie-detail");
   const tags = movie.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+  const finalScore = getFinalScore(movie);
+  const watchDate = formatWatchDate(movie.watchDate);
 
   container.innerHTML = `
     <article class="detail-layout reveal">
@@ -73,6 +75,8 @@ function renderMovie(movie) {
           <li><span class="meta-label">年份</span><span class="meta-value">${movie.year}</span></li>
           <li><span class="meta-label">国家/地区</span><span class="meta-value">${movie.country}</span></li>
           <li><span class="meta-label">导演</span><span class="meta-value">${movie.director}</span></li>
+          <li><span class="meta-label">最终得分</span><span class="meta-value">${finalScore.toFixed(1)} / 100</span></li>
+          <li><span class="meta-label">观影日期</span><span class="meta-value">${watchDate}</span></li>
           <li><span class="meta-label">我的评分</span><span class="meta-value">${movie.rating} / 10</span></li>
         </ul>
 
@@ -118,6 +122,30 @@ function clamp(value, min, max) {
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
+}
+
+function getFinalScore(movie) {
+  if (isFiniteNumber(movie?.summaryScores?.total)) {
+    return movie.summaryScores.total;
+  }
+  if (isFiniteNumber(movie?.rating)) {
+    return movie.rating * 10;
+  }
+  return 0;
+}
+
+function formatWatchDate(dateStr) {
+  if (!dateStr) {
+    return "未记录";
+  }
+  const parsed = new Date(dateStr);
+  if (Number.isNaN(parsed.getTime())) {
+    return dateStr;
+  }
+  const y = parsed.getFullYear();
+  const m = String(parsed.getMonth() + 1).padStart(2, "0");
+  const d = String(parsed.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 initDetailPage();

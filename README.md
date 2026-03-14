@@ -64,6 +64,7 @@ npm run sync:data
 - `类型` -> `tags`
 - `一句话短评` -> `logline`
 - `网站说明` -> `note`
+- `观影日期` -> `watchDate`
 - `首页精选` -> `featured`
 - `海报` -> `poster`
 - `实际总分`（或维度均分）-> `rating`

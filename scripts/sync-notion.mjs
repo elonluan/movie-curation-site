@@ -131,6 +131,7 @@ function toMovie(page, usedIds) {
   const countryList = getMultiSelect(p["地区"]);
   const typeTags = getMultiSelect(p["类型"]);
   const director = getRichText(p["导演"]).trim();
+  const watchDate = getDateStart(p["观影日期"]);
 
   const baseId = makeBaseId({
     title: titleOriginal || titleZh,
@@ -154,6 +155,7 @@ function toMovie(page, usedIds) {
     tags: normalizeTags(typeTags),
     logline: getRichText(p["一句话短评"]).trim() || "",
     note: getRichText(p["网站说明"]).trim() || "",
+    watchDate,
     posterTone: pickPosterTone(id),
     featured: getCheckbox(p["首页精选"]),
     onSite: getCheckbox(p["上站"]),
@@ -333,6 +335,13 @@ function getMultiSelect(prop) {
     return [];
   }
   return prop.multi_select.map((item) => item.name).filter(Boolean);
+}
+
+function getDateStart(prop) {
+  if (!prop || prop.type !== "date" || !prop.date?.start) {
+    return "";
+  }
+  return prop.date.start;
 }
 
 function getFirstFileUrl(prop) {

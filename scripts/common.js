@@ -65,7 +65,9 @@ function generatePoster(movie) {
 }
 
 export function createMovieCard(movie, { className = "movie-card", withIntro = false } = {}) {
-  const coreTag = movie.coreDimension ? `<span class="tag">分馆·${movie.coreDimension}</span>` : "";
+  const finalScore = getFinalScore(movie);
+  const watchDate = formatWatchDate(movie.watchDate);
+  const meta = `最终得分 ${finalScore.toFixed(1)} · 观影日期 ${watchDate}`;
 
   const a = document.createElement("a");
   a.href = `/movie.html?id=${encodeURIComponent(movie.id)}`;
@@ -78,14 +80,38 @@ export function createMovieCard(movie, { className = "movie-card", withIntro = f
       <h3 class="card-title">${movie.titleZh}</h3>
       <p class="card-subtitle">${movie.titleOriginal}</p>
       <p class="card-year">${movie.year}</p>
+      <p class="card-meta">${meta}</p>
       <div class="tag-row">
-        ${coreTag}
         ${movie.tags.slice(0, 3).map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </div>
       ${withIntro ? `<p class="card-subtitle" style="margin-top: 12px;">${movie.logline}</p>` : ""}
     </div>
   `;
   return a;
+}
+
+function getFinalScore(movie) {
+  if (typeof movie?.summaryScores?.total === "number" && Number.isFinite(movie.summaryScores.total)) {
+    return movie.summaryScores.total;
+  }
+  if (typeof movie?.rating === "number" && Number.isFinite(movie.rating)) {
+    return movie.rating * 10;
+  }
+  return 0;
+}
+
+function formatWatchDate(dateStr) {
+  if (!dateStr) {
+    return "未记录";
+  }
+  const parsed = new Date(dateStr);
+  if (Number.isNaN(parsed.getTime())) {
+    return dateStr;
+  }
+  const y = parsed.getFullYear();
+  const m = String(parsed.getMonth() + 1).padStart(2, "0");
+  const d = String(parsed.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 export function mountYear() {

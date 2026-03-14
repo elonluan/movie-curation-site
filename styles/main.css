@@ -259,6 +259,12 @@ img {
   color: rgba(30, 27, 24, 0.74);
 }
 
+.card-meta {
+  margin: 8px 0 0;
+  font-size: 0.77rem;
+  color: var(--ink-soft);
+}
+
 .tag-row {
   display: flex;
   flex-wrap: wrap;
@@ -283,40 +289,6 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-}
-
-.catalog-controls {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.mode-switch {
-  display: inline-flex;
-  gap: 8px;
-  padding: 6px;
-  border: 1px solid rgba(122, 95, 59, 0.2);
-  border-radius: 999px;
-  background: rgba(250, 248, 243, 0.85);
-}
-
-.mode-btn {
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background: transparent;
-  min-height: 34px;
-  padding: 0 14px;
-  color: var(--ink-soft);
-  font-size: 0.82rem;
-  cursor: pointer;
-}
-
-.mode-btn:hover {
-  color: var(--ink);
-}
-
-.mode-btn.active {
-  background: var(--ink);
-  color: #f8f3e8;
 }
 
 .filter-btn {
