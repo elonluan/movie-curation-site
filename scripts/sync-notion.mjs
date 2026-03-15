@@ -159,6 +159,7 @@ function toMovie(page, usedIds) {
     posterTone: pickPosterTone(id),
     featured: getCheckbox(p["首页精选"]),
     onSite: getCheckbox(p["上站"]),
+    isTheatrical: getTheatricalFlag(p),
     coreDimension,
     summaryScores,
     dimensionScores
@@ -342,6 +343,98 @@ function getDateStart(prop) {
     return "";
   }
   return prop.date.start;
+}
+
+function getTheatricalFlag(properties) {
+  const candidateNames = ["是否院线", "院线", "院线观影", "观影场景"];
+
+  for (const name of candidateNames) {
+    const prop = properties[name];
+    if (!prop) {
+      continue;
+    }
+
+    const parsed = propertyToBoolean(prop);
+    if (parsed !== null) {
+      return parsed;
+    }
+  }
+
+  return false;
+}
+
+function propertyToBoolean(prop) {
+  if (!prop) {
+    return null;
+  }
+
+  if (prop.type === "checkbox") {
+    return Boolean(prop.checkbox);
+  }
+
+  if (prop.type === "select") {
+    return textToBoolean(prop.select?.name);
+  }
+
+  if (prop.type === "status") {
+    return textToBoolean(prop.status?.name);
+  }
+
+  if (prop.type === "multi_select") {
+    if (!Array.isArray(prop.multi_select) || prop.multi_select.length === 0) {
+      return null;
+    }
+    const flags = prop.multi_select.map((item) => textToBoolean(item.name)).filter((v) => v !== null);
+    return flags.length ? flags[0] : null;
+  }
+
+  if (prop.type === "rich_text") {
+    const text = prop.rich_text.map((item) => item.plain_text || "").join("");
+    return textToBoolean(text);
+  }
+
+  if (prop.type === "formula") {
+    const formula = prop.formula;
+    if (!formula) {
+      return null;
+    }
+    if (formula.type === "boolean") {
+      return Boolean(formula.boolean);
+    }
+    if (formula.type === "number" && Number.isFinite(formula.number)) {
+      return formula.number > 0;
+    }
+    if (formula.type === "string") {
+      return textToBoolean(formula.string);
+    }
+    return null;
+  }
+
+  return null;
+}
+
+function textToBoolean(input) {
+  if (!input || typeof input !== "string") {
+    return null;
+  }
+
+  const normalized = input.trim().toLowerCase();
+  if (!normalized) {
+    return null;
+  }
+
+  const falseHints = ["非院线", "不是院线", "否", "no", "false", "home", "stream"];
+  const trueHints = ["院线", "影院", "yes", "true", "cinema", "theater", "theatre"];
+
+  if (falseHints.some((hint) => normalized.includes(hint))) {
+    return false;
+  }
+
+  if (trueHints.some((hint) => normalized.includes(hint))) {
+    return true;
+  }
+
+  return null;
 }
 
 function getFirstFileUrl(prop) {

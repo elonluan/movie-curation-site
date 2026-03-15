@@ -24,12 +24,30 @@
         <section class="page-title reveal">
           <span class="eyebrow">Hall II</span>
           <h1>胶片日历展厅</h1>
-          <p>按观影日期由近到远排序，并可随时按标签筛选时间线。</p>
+          <p>以时间为骨架、以胶片为语言：在纵向卷轴中浏览每次观影曝光。</p>
         </section>
 
-        <section class="section hall-stage" style="margin-top: 24px;">
+        <section class="section hall-stage reel-hall-stage" style="margin-top: 24px;">
           <div id="calendar-tag-filter-bar" class="filter-bar" aria-label="标签筛选"></div>
-          <div id="calendar-stream" class="calendar-stream" aria-live="polite"></div>
+          <div id="calendar-month-index" class="month-index-bar" aria-label="月份快速索引"></div>
+
+          <div class="reel-layout">
+            <div id="calendar-reel" class="calendar-reel" aria-live="polite"></div>
+
+            <aside class="day-screening-panel" aria-live="polite">
+              <div class="day-screening-head">
+                <h2 id="day-screening-title">滚动左侧卷轴，右侧同步显影海报</h2>
+                <p id="day-screening-meta">当前聚焦日期会自动放大，对应左侧日期词条。</p>
+              </div>
+              <div id="poster-flow" class="poster-flow"></div>
+              <div id="poster-focus-info" class="poster-focus-info"></div>
+            </aside>
+
+            <svg id="reel-connector" class="reel-connector" aria-hidden="true">
+              <path id="reel-connector-beam" d=""></path>
+              <path id="reel-connector-line" d=""></path>
+            </svg>
+          </div>
         </section>
 
         <section class="section cross-hall-nav">

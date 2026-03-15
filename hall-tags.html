@@ -27,10 +27,36 @@
           <p>按国家分类浏览，在地理脉络中回看你的观影分布。</p>
         </section>
 
-        <section class="section hall-stage" style="margin-top: 24px;">
-          <div id="country-filter-bar" class="filter-bar" aria-label="国家筛选"></div>
-          <div id="country-tag-filter-bar" class="filter-bar" aria-label="类型标签筛选"></div>
-          <div id="country-stream" class="country-stream" aria-live="polite"></div>
+        <section class="section hall-stage map-hall-stage" style="margin-top: 24px;">
+          <div class="map-filter-wrap">
+            <div id="country-filter-bar" class="filter-bar" aria-label="地区目录"></div>
+            <div id="country-tag-filter-bar" class="filter-bar" aria-label="类型标签筛选"></div>
+          </div>
+
+          <div class="film-map-layout">
+            <div id="film-map-stage" class="film-map-stage">
+              <svg
+                id="film-map-svg"
+                class="film-map-svg"
+                viewBox="0 0 980 520"
+                aria-label="可交互世界电影地图"
+                role="img"
+              ></svg>
+              <aside id="map-preview-card" class="map-preview-card" hidden></aside>
+              <button id="map-clear-anchor" class="map-clear-anchor" type="button">取消选中地区</button>
+            </div>
+          </div>
+
+          <section class="map-screening" aria-live="polite">
+            <div class="map-screening-head">
+              <div>
+                <h2 id="map-screening-title">点击地图中的国家/地区，展开完整片单</h2>
+                <p id="map-screening-meta">悬停可快速预览代表电影，点击进入完整展映。</p>
+              </div>
+              <button id="map-clear-panel" class="btn" type="button">清除选中</button>
+            </div>
+            <div id="map-screening-grid" class="grid"></div>
+          </section>
         </section>
 
         <section class="section cross-hall-nav">

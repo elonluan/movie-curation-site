@@ -1,21 +1,58 @@
-import { createMovieCard, loadMovies, mountYear } from "./common.js";
+import { loadMovies, mountYear, pickPoster } from "./common.js";
 
-const SORT_OPTIONS = [
-  { key: "total", label: "最终得分" },
+const MODES = [
+  { key: "final", label: "最终得分" },
   { key: "personal", label: "个人维度" },
   { key: "art", label: "艺术维度" },
   { key: "external", label: "外部维度" }
 ];
 
+const SCORE_BANDS = [
+  { key: "90", label: "90-100 分", kicker: "高分区", min: 90 },
+  { key: "80", label: "80-89 分", kicker: "核心区", min: 80 },
+  { key: "70", label: "70-79 分", kicker: "稳态区", min: 70 },
+  { key: "0", label: "70 分以下", kicker: "观察区", min: 0 }
+];
+
 const state = {
   movies: [],
-  mode: "total",
+  mode: "final",
   activeTag: "全部"
 };
 
-function modeLabel(mode) {
-  const option = SORT_OPTIONS.find((item) => item.key === mode);
-  return option?.label ?? "最终得分";
+function safe(value) {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
+}
+
+function formatScore(value) {
+  return safe(value).toFixed(1);
+}
+
+function formatWatchDate(dateStr) {
+  if (!dateStr) {
+    return "未记录";
+  }
+  const parsed = new Date(dateStr);
+  if (Number.isNaN(parsed.getTime())) {
+    return dateStr;
+  }
+  const y = parsed.getFullYear();
+  const m = String(parsed.getMonth() + 1).padStart(2, "0");
+  const d = String(parsed.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function watchTs(movie) {
+  if (!movie.watchDate) {
+    return Number.NEGATIVE_INFINITY;
+  }
+  const ts = Date.parse(movie.watchDate);
+  return Number.isFinite(ts) ? ts : Number.NEGATIVE_INFINITY;
+}
+
+function modeLabel(key) {
+  const found = MODES.find((mode) => mode.key === key);
+  return found ? found.label : "最终得分";
 }
 
 function getAllTags(movies) {
@@ -27,168 +64,368 @@ function getAllTags(movies) {
   return ["全部", ...Array.from(tagSet)];
 }
 
-function scoreOf(movie, mode) {
+function buildScoreProfile(movie) {
   const summary = movie.summaryScores ?? {};
+  const personal = safe(summary.personal);
+  const art = safe(summary.art);
+  const external = safe(summary.external);
+
+  const computedMax = Math.max(personal, art, external);
+  const hasDim = computedMax > 0;
+  const fallbackTotal = safe(summary.total) || safe(movie.rating) * 10;
+  const final = hasDim ? computedMax : fallbackTotal;
+
+  const dominantKeys = hasDim
+    ? [
+        ["personal", personal],
+        ["art", art],
+        ["external", external]
+      ]
+        .filter((item) => item[1] === computedMax)
+        .map((item) => item[0])
+    : [];
+
+  return {
+    personal,
+    art,
+    external,
+    final,
+    dominantKeys
+  };
+}
+
+function scoreOf(movie, mode) {
   if (mode === "personal") {
-    return safe(summary.personal);
+    return movie._scoreProfile.personal;
   }
   if (mode === "art") {
-    return safe(summary.art);
+    return movie._scoreProfile.art;
   }
   if (mode === "external") {
-    return safe(summary.external);
+    return movie._scoreProfile.external;
   }
-  return safe(summary.total) || safe(movie.rating) * 10;
+  return movie._scoreProfile.final;
 }
 
-function watchTs(movie) {
-  if (!movie.watchDate) {
-    return Number.NEGATIVE_INFINITY;
+function tierByScore(score) {
+  if (score >= 90) {
+    return "S";
   }
-  const ts = Date.parse(movie.watchDate);
-  return Number.isFinite(ts) ? ts : Number.NEGATIVE_INFINITY;
-}
-
-function safe(value) {
-  return typeof value === "number" && Number.isFinite(value) ? value : 0;
-}
-
-function bucketStart(score) {
-  const normalized = Math.max(0, Math.min(100, Math.floor(score)));
-  if (normalized === 100) {
-    return 100;
+  if (score >= 80) {
+    return "A";
   }
-  return Math.floor(normalized / 10) * 10;
-}
-
-function bucketLabel(start) {
-  if (start === 100) {
-    return "100 分档";
+  if (score >= 70) {
+    return "B";
   }
-  return `${start}-${start + 9} 分档`;
+  return "C";
 }
 
-function renderSortBar() {
-  const bar = document.querySelector("#score-sort-bar");
+function bandKeyByScore(score) {
+  if (score >= 90) {
+    return "90";
+  }
+  if (score >= 80) {
+    return "80";
+  }
+  if (score >= 70) {
+    return "70";
+  }
+  return "0";
+}
+
+function dominantLabel(profile) {
+  if (!profile.dominantKeys.length) {
+    return "未判定";
+  }
+  if (profile.dominantKeys.length > 1) {
+    return "并列主导";
+  }
+  if (profile.dominantKeys[0] === "personal") {
+    return "个人主导";
+  }
+  if (profile.dominantKeys[0] === "art") {
+    return "艺术主导";
+  }
+  return "外部主导";
+}
+
+function buildBandBuckets(list) {
+  const buckets = SCORE_BANDS.map((band) => ({
+    ...band,
+    movies: []
+  }));
+  const bucketMap = new Map(buckets.map((bucket) => [bucket.key, bucket]));
+
+  list.forEach((movie) => {
+    const score = scoreOf(movie, state.mode);
+    const key = bandKeyByScore(score);
+    const bucket = bucketMap.get(key);
+    if (bucket) {
+      bucket.movies.push(movie);
+    }
+  });
+
+  return buckets;
+}
+
+function renderModeBar() {
+  const bar = document.querySelector("#score-mode-bar");
   bar.innerHTML = "";
 
-  SORT_OPTIONS.forEach((option) => {
+  MODES.forEach((mode) => {
     const button = document.createElement("button");
-    button.className = "filter-btn";
     button.type = "button";
-    button.textContent = option.label;
-    button.classList.toggle("active", option.key === state.mode);
+    button.className = "filter-btn";
+    button.classList.toggle("active", state.mode === mode.key);
+    button.textContent = mode.label;
 
     button.addEventListener("click", () => {
-      state.mode = option.key;
-      renderSortBar();
-      renderHall();
+      state.mode = mode.key;
+      renderModeBar();
+      renderLeaderboard();
     });
 
     bar.append(button);
   });
 }
 
-function renderTagFilters() {
+function renderTagBar() {
   const bar = document.querySelector("#score-tag-filter-bar");
   bar.innerHTML = "";
 
   getAllTags(state.movies).forEach((tag) => {
     const button = document.createElement("button");
-    button.className = "filter-btn";
     button.type = "button";
+    button.className = "filter-btn";
+    button.classList.toggle("active", state.activeTag === tag);
     button.textContent = tag;
-    button.classList.toggle("active", tag === state.activeTag);
 
     button.addEventListener("click", () => {
       state.activeTag = tag;
-      renderTagFilters();
-      renderHall();
+      renderTagBar();
+      renderLeaderboard();
     });
 
     bar.append(button);
   });
 }
 
-function renderHall() {
-  const board = document.querySelector("#score-grid");
-  board.innerHTML = "";
-
+function buildFiltered() {
   const filtered =
     state.activeTag === "全部"
-      ? state.movies
+      ? [...state.movies]
       : state.movies.filter((movie) => (Array.isArray(movie.tags) ? movie.tags : []).includes(state.activeTag));
 
-  const sorted = [...filtered].sort((a, b) => {
+  filtered.sort((a, b) => {
     const diff = scoreOf(b, state.mode) - scoreOf(a, state.mode);
     if (diff !== 0) {
       return diff;
     }
+
+    const finalDiff = b._scoreProfile.final - a._scoreProfile.final;
+    if (finalDiff !== 0) {
+      return finalDiff;
+    }
+
     return watchTs(b) - watchTs(a);
   });
 
-  if (!sorted.length) {
-    board.innerHTML = `<div class="empty">当前标签下暂无可展示的评分结果。</div>`;
+  return filtered;
+}
+
+function renderSummary(list) {
+  const summary = document.querySelector("#score-summary");
+
+  if (!list.length) {
+    summary.innerHTML = "";
     return;
   }
 
-  const buckets = new Map();
-  sorted.forEach((movie) => {
-    const start = bucketStart(scoreOf(movie, state.mode));
-    if (!buckets.has(start)) {
-      buckets.set(start, []);
-    }
-    buckets.get(start).push(movie);
-  });
+  const top = list[0];
+  const topScore = scoreOf(top, state.mode);
 
-  const orderedBuckets = [...buckets.keys()].sort((a, b) => b - a);
-  let revealIndex = 0;
+  summary.innerHTML = `
+    <p class="score-summary-kicker">Ranking Rule</p>
+    <h2 class="score-summary-title">当前榜单按「${modeLabel(state.mode)}」从高到低排列</h2>
+    <p class="score-summary-text">最终分规则固定为 max(个人, 艺术, 外部)。当前共 ${list.length} 部，榜首《${top.titleZh}》得分 ${formatScore(topScore)}。</p>
+  `;
+}
 
-  orderedBuckets.forEach((start, bucketIndex) => {
-    const movies = buckets.get(start) ?? [];
-    const section = document.createElement("section");
-    section.className = "score-bucket reveal";
-    section.style.animationDelay = `${bucketIndex * 36}ms`;
+function renderTopCards(list) {
+  if (!list.length) {
+    return "";
+  }
 
-    const head = document.createElement("div");
-    head.className = "score-bucket-head";
+  return `
+    <section class="score-top-grid" aria-label="榜单前三">
+      ${list
+        .slice(0, 3)
+        .map((movie, idx) => {
+          const profile = movie._scoreProfile;
+          const score = scoreOf(movie, state.mode);
+          return `
+            <a class="score-top-card" href="/movie.html?id=${encodeURIComponent(movie.id)}">
+              <span class="score-top-rank">#${idx + 1}</span>
+              <div class="score-top-poster"><img src="${pickPoster(movie)}" alt="${movie.titleZh} 海报" loading="lazy" /></div>
+              <div class="score-top-body">
+                <h3>${movie.titleZh}</h3>
+                <p>${modeLabel(state.mode)} ${formatScore(score)} · 最终 ${formatScore(profile.final)}</p>
+                <p>${dominantLabel(profile)} · ${formatWatchDate(movie.watchDate)}</p>
+              </div>
+            </a>
+          `;
+        })
+        .join("")}
+    </section>
+  `;
+}
 
-    const title = document.createElement("h3");
-    title.className = "score-bucket-title";
-    title.textContent = bucketLabel(start);
+function rowMarkup(movie, rank) {
+  const profile = movie._scoreProfile;
+  const currentScore = scoreOf(movie, state.mode);
+  const tier = tierByScore(currentScore);
+  const tags = Array.isArray(movie.tags) ? movie.tags.slice(0, 3) : [];
 
-    const meta = document.createElement("p");
-    meta.className = "score-bucket-meta";
-    meta.textContent = `${modeLabel(state.mode)} · ${movies.length} 部`;
+  return `
+    <a class="score-rank-row" href="/movie.html?id=${encodeURIComponent(movie.id)}">
+      <div class="score-rank-num">${String(rank).padStart(2, "0")}</div>
+      <div class="score-rank-poster">
+        <img src="${pickPoster(movie)}" alt="${movie.titleZh} 海报" loading="lazy" />
+      </div>
+      <div class="score-rank-main">
+        <div class="score-rank-head">
+          <h3>${movie.titleZh}</h3>
+          <span class="score-rank-tier tier-${tier}">${tier}</span>
+        </div>
+        <p class="score-rank-meta">${modeLabel(state.mode)} ${formatScore(currentScore)} · 最终 ${formatScore(profile.final)} · ${formatWatchDate(movie.watchDate)}</p>
+        <div class="score-rank-bars">
+          <span class="rank-bar personal${state.mode === "personal" ? " active" : ""}" style="--w:${profile.personal}%;">个 ${formatScore(profile.personal)}</span>
+          <span class="rank-bar art${state.mode === "art" ? " active" : ""}" style="--w:${profile.art}%;">艺 ${formatScore(profile.art)}</span>
+          <span class="rank-bar external${state.mode === "external" ? " active" : ""}" style="--w:${profile.external}%;">外 ${formatScore(profile.external)}</span>
+        </div>
+        ${
+          tags.length
+            ? `<div class="score-rank-tags">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`
+            : ""
+        }
+      </div>
+    </a>
+  `;
+}
 
-    head.append(title, meta);
+function renderBandIndex(buckets) {
+  return `
+    <aside class="score-range-index" aria-label="分数区间目录">
+      <p class="score-range-index-kicker">目录</p>
+      <h3 class="score-range-index-title">快速前往分数区间</h3>
+      <nav class="score-range-index-nav">
+        ${buckets
+          .map((bucket) => {
+            const disabled = bucket.movies.length === 0;
+            return `
+              <a
+                class="score-index-link${disabled ? " is-empty" : ""}"
+                href="#score-band-${bucket.key}"
+                ${disabled ? 'aria-disabled="true"' : ""}
+              >
+                <span>${bucket.label}</span>
+                <em>${bucket.movies.length} 部</em>
+              </a>
+            `;
+          })
+          .join("")}
+      </nav>
+    </aside>
+  `;
+}
 
-    const grid = document.createElement("div");
-    grid.className = "grid score-bucket-grid";
+function renderBandSections(buckets, rankMap) {
+  return buckets
+    .map((bucket) => {
+      const body = bucket.movies.length
+        ? `
+          <div class="score-rank-list">
+            ${bucket.movies.map((movie) => rowMarkup(movie, rankMap.get(movie.id) ?? 0)).join("")}
+          </div>
+        `
+        : `<div class="score-band-empty">当前区间暂无电影。</div>`;
 
-    movies.forEach((movie) => {
-      const card = createMovieCard(movie, { scoreMode: state.mode });
-      card.classList.add("reveal");
-      card.style.animationDelay = `${revealIndex * 14}ms`;
-      revealIndex += 1;
-      grid.append(card);
+      return `
+        <section class="score-band-section" id="score-band-${bucket.key}">
+          <header class="score-band-head">
+            <div>
+              <p class="score-band-kicker">${bucket.kicker}</p>
+              <h3>${bucket.label}</h3>
+            </div>
+            <span>${bucket.movies.length} 部</span>
+          </header>
+          ${body}
+        </section>
+      `;
+    })
+    .join("");
+}
+
+function renderLeaderboard() {
+  const mount = document.querySelector("#score-leaderboard");
+  const list = buildFiltered();
+  renderSummary(list);
+
+  if (!list.length) {
+    mount.innerHTML = `<div class="empty">当前标签下暂无可展示的电影。</div>`;
+    return;
+  }
+
+  const topMarkup = renderTopCards(list);
+  const rankMap = new Map(list.map((movie, idx) => [movie.id, idx + 1]));
+  const buckets = buildBandBuckets(list);
+  const indexMarkup = renderBandIndex(buckets);
+  const sectionsMarkup = renderBandSections(buckets, rankMap);
+
+  mount.innerHTML = `
+    <section class="score-rank-layout">
+      ${indexMarkup}
+      <div class="score-rank-content">
+        ${topMarkup}
+        <div class="score-band-stack" aria-label="分数区间榜单">
+          ${sectionsMarkup}
+        </div>
+      </div>
+    </section>
+  `;
+
+  mount.querySelectorAll('.score-index-link[href^="#score-band-"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (link.classList.contains("is-empty")) {
+        event.preventDefault();
+        return;
+      }
+      const target = document.querySelector(link.getAttribute("href"));
+      if (!target) {
+        return;
+      }
+      event.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-
-    section.append(head, grid);
-    board.append(section);
   });
 }
 
 async function init() {
   mountYear();
+
   try {
-    state.movies = await loadMovies();
-    renderSortBar();
-    renderTagFilters();
-    renderHall();
+    const movies = await loadMovies();
+    state.movies = movies.map((movie) => ({
+      ...movie,
+      _scoreProfile: buildScoreProfile(movie)
+    }));
+
+    renderModeBar();
+    renderTagBar();
+    renderLeaderboard();
   } catch (error) {
     console.error(error);
-    document.querySelector("#score-grid").innerHTML = `<div class="empty">电影数据读取失败，请检查 /data/movies.json。</div>`;
+    document.querySelector("#score-leaderboard").innerHTML = `<div class="empty">电影数据读取失败，请检查 /data/movies.json。</div>`;
   }
 }
 

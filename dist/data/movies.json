@@ -16,6 +16,7 @@
     "posterTone": "rust",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 78.6,
@@ -68,6 +69,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 70.2,
@@ -120,6 +122,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 74.2,
@@ -170,6 +173,7 @@
     "posterTone": "amber",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 69.8,
@@ -222,6 +226,7 @@
     "posterTone": "slate",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 59.6,
@@ -274,6 +279,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 67.2,
@@ -324,6 +330,7 @@
     "posterTone": "slate",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 72.2,
@@ -374,6 +381,7 @@
     "posterTone": "charcoal",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 69.2,
@@ -424,6 +432,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 60.2,
@@ -476,6 +485,7 @@
     "posterTone": "amber",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 46,
@@ -527,6 +537,7 @@
     "posterTone": "amber",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 69.4,
@@ -577,6 +588,7 @@
     "posterTone": "rose",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 64.4,
@@ -627,6 +639,7 @@
     "posterTone": "charcoal",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 72,
@@ -678,6 +691,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 83.8,
@@ -728,6 +742,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 44.2,
@@ -779,6 +794,7 @@
     "posterTone": "rust",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 72.2,
@@ -830,6 +846,7 @@
     "posterTone": "paper",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 71.4,
@@ -882,6 +899,7 @@
     "posterTone": "rose",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 48.4,
@@ -932,6 +950,7 @@
     "posterTone": "mono",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 64,
@@ -982,6 +1001,7 @@
     "posterTone": "rust",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 40.4,
@@ -1032,6 +1052,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 53.8,
@@ -1083,6 +1104,7 @@
     "posterTone": "sunset",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 74.2,
@@ -1133,6 +1155,7 @@
     "posterTone": "sunset",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 50.6,
@@ -1183,6 +1206,7 @@
     "posterTone": "oxide",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 61.2,
@@ -1235,6 +1259,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 68.4,
@@ -1286,6 +1311,7 @@
     "posterTone": "oxide",
     "featured": false,
     "onSite": true,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 89.4,
@@ -1337,6 +1363,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 46.4,
@@ -1389,6 +1416,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 73.6,
@@ -1441,6 +1469,7 @@
     "posterTone": "mono",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 50.8,
@@ -1493,6 +1522,7 @@
     "posterTone": "slate",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 64.4,
@@ -1544,6 +1574,7 @@
     "posterTone": "mist",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 83.6,
@@ -1594,6 +1625,7 @@
     "posterTone": "charcoal",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 56.2,
@@ -1645,6 +1677,7 @@
     "posterTone": "oxide",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 67.2,
@@ -1697,6 +1730,7 @@
     "posterTone": "mist",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 82,
@@ -1747,6 +1781,7 @@
     "posterTone": "oxide",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 60.4,
@@ -1798,6 +1833,7 @@
     "posterTone": "rust",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 87.6,
@@ -1850,6 +1886,7 @@
     "posterTone": "sunset",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 75.2,
@@ -1901,6 +1938,7 @@
     "posterTone": "sunset",
     "featured": false,
     "onSite": true,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 88.4,
@@ -1953,6 +1991,7 @@
     "posterTone": "paper",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 67.4,
@@ -2003,6 +2042,7 @@
     "posterTone": "amber",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 66,
@@ -2053,6 +2093,7 @@
     "posterTone": "sunset",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 72.4,
@@ -2105,6 +2146,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 78.2,
@@ -2157,6 +2199,7 @@
     "posterTone": "paper",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 65.8,
@@ -2208,6 +2251,7 @@
     "posterTone": "charcoal",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 76.8,
@@ -2258,6 +2302,7 @@
     "posterTone": "olive",
     "featured": false,
     "onSite": true,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 80.8,
@@ -2308,6 +2353,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 87.6,
@@ -2358,6 +2404,7 @@
     "posterTone": "paper",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 82.2,
@@ -2410,6 +2457,7 @@
     "posterTone": "oxide",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 60.8,
@@ -2462,6 +2510,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 52.6,
@@ -2514,6 +2563,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 77.4,
@@ -2565,6 +2615,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 92,
@@ -2617,6 +2668,7 @@
     "posterTone": "amber",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 76.2,
@@ -2668,6 +2720,7 @@
     "posterTone": "mono",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 82.4,
@@ -2720,6 +2773,7 @@
     "posterTone": "amber",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 65.6,
@@ -2772,6 +2826,7 @@
     "posterTone": "rose",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 83,
@@ -2822,6 +2877,7 @@
     "posterTone": "mist",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 85.4,
@@ -2872,6 +2928,7 @@
     "posterTone": "charcoal",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 80.2,
@@ -2923,6 +2980,7 @@
     "posterTone": "rose",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 78.4,
@@ -2975,6 +3033,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 71.6,
@@ -3025,6 +3084,7 @@
     "posterTone": "mist",
     "featured": false,
     "onSite": true,
+    "isTheatrical": true,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 92,
@@ -3075,6 +3135,7 @@
     "posterTone": "sunset",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 82.8,
@@ -3126,6 +3187,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 71.4,
@@ -3177,6 +3239,7 @@
     "posterTone": "charcoal",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 70.6,
@@ -3228,6 +3291,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 81.6,
@@ -3278,6 +3342,7 @@
     "posterTone": "oxide",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 55.6,
@@ -3329,6 +3394,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 68.2,
@@ -3380,6 +3446,7 @@
     "posterTone": "oxide",
     "featured": true,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 94,
@@ -3433,6 +3500,7 @@
     "posterTone": "paper",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 85.6,
@@ -3485,6 +3553,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 87.2,
@@ -3536,6 +3605,7 @@
     "posterTone": "paper",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 67.6,
@@ -3587,6 +3657,7 @@
     "posterTone": "mono",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 74.2,
@@ -3639,6 +3710,7 @@
     "posterTone": "forest",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 75.6,
@@ -3690,6 +3762,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 76,
@@ -3741,6 +3814,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 75.6,
@@ -3793,6 +3867,7 @@
     "posterTone": "slate",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 83.8,
@@ -3843,6 +3918,7 @@
     "posterTone": "charcoal",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 90.4,
@@ -3894,6 +3970,7 @@
     "posterTone": "slate",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 73.8,
@@ -3945,6 +4022,7 @@
     "posterTone": "mist",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 77,
@@ -3996,6 +4074,7 @@
     "posterTone": "olive",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 90.6,
@@ -4048,6 +4127,7 @@
     "posterTone": "slate",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 84.6,
@@ -4099,6 +4179,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 85.2,
@@ -4151,6 +4232,7 @@
     "posterTone": "sunset",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 68.6,
@@ -4201,6 +4283,7 @@
     "posterTone": "mist",
     "featured": false,
     "onSite": false,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 81,
@@ -4251,6 +4334,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "个人",
     "summaryScores": {
       "personal": 91.4,
@@ -4302,6 +4386,7 @@
     "posterTone": "rose",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 84.6,
@@ -4354,6 +4439,7 @@
     "posterTone": "ink",
     "featured": false,
     "onSite": true,
+    "isTheatrical": false,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 83,
@@ -4404,6 +4490,7 @@
     "posterTone": "earth",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "艺术",
     "summaryScores": {
       "personal": 77.4,
@@ -4456,6 +4543,7 @@
     "posterTone": "rose",
     "featured": false,
     "onSite": false,
+    "isTheatrical": true,
     "coreDimension": "外部",
     "summaryScores": {
       "personal": 83,
