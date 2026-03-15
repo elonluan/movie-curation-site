@@ -3,11 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="帧间档案评分展厅。" />
-    <title>评分展厅 | 帧间档案</title>
-    <link rel="stylesheet" href="/styles/main.css" />
+    <meta name="description" content="帧间档案胶片日历展厅。" />
+    <title>胶片日历展厅 | 帧间档案</title>
+    <script type="module" crossorigin src="/assets/hallCalendar-BtV1ex4C.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/common-CZ9u61u_.js">
+    <link rel="stylesheet" crossorigin href="/assets/common-BB4pkao0.css">
   </head>
-  <body class="hall-theme score-theme">
+  <body class="hall-theme calendar-theme">
     <div class="site-shell">
       <header class="site-header">
         <div class="header-inner">
@@ -22,31 +24,30 @@
 
       <main class="main">
         <section class="page-title reveal">
-          <span class="eyebrow">Hall III</span>
-          <h1>评分展厅</h1>
-          <p>按最终分或三大维度排序，分值显示与排序标准同步变化。</p>
+          <span class="eyebrow">Hall II</span>
+          <h1>胶片日历展厅</h1>
+          <p>按观影日期由近到远，回看你和电影相遇的时间线。</p>
         </section>
 
         <section class="section hall-stage" style="margin-top: 24px;">
-          <div id="score-sort-bar" class="filter-bar" aria-label="评分排序"></div>
-          <div id="score-grid" class="grid" aria-live="polite"></div>
+          <div id="calendar-stream" class="calendar-stream" aria-live="polite"></div>
         </section>
 
         <section class="section cross-hall-nav">
           <div class="section-head">
             <h2>继续参观</h2>
-            <p>从评分结构前往其他展厅。</p>
+            <p>从日历时间线前往其他展厅。</p>
           </div>
           <div class="cross-hall-grid">
             <a class="hall-entry-card tags" href="/hall-tags.html">
               <span class="hall-kicker">Hall I</span>
               <h3>前往标签索引展厅</h3>
-              <p>按标签组合快速切换电影视角。</p>
+              <p>按标签聚类筛选，寻找同类气质电影。</p>
             </a>
-            <a class="hall-entry-card calendar" href="/hall-calendar.html">
-              <span class="hall-kicker">Hall II</span>
-              <h3>前往胶片日历展厅</h3>
-              <p>回到时间轴，查看观看顺序。</p>
+            <a class="hall-entry-card score" href="/hall-score.html">
+              <span class="hall-kicker">Hall III</span>
+              <h3>前往评分展厅</h3>
+              <p>切换评分维度，比较偏好变化。</p>
             </a>
           </div>
         </section>
@@ -55,6 +56,5 @@
       <footer class="site-footer">Frame Archive · <span data-year></span></footer>
     </div>
 
-    <script type="module" src="/scripts/hall-score.js"></script>
   </body>
 </html>
