@@ -64,10 +64,14 @@ function generatePoster(movie) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-export function createMovieCard(movie, { className = "movie-card", withIntro = false } = {}) {
-  const finalScore = getFinalScore(movie);
+export function createMovieCard(
+  movie,
+  { className = "movie-card", withIntro = false, scoreMode = "total" } = {}
+) {
+  const score = getScoreByMode(movie, scoreMode);
+  const scoreLabel = getScoreLabel(scoreMode);
   const watchDate = formatWatchDate(movie.watchDate);
-  const meta = `最终得分 ${finalScore.toFixed(1)} · 观影日期 ${watchDate}`;
+  const meta = `${scoreLabel} ${score.toFixed(1)} · 观影日期 ${watchDate}`;
 
   const a = document.createElement("a");
   a.href = `/movie.html?id=${encodeURIComponent(movie.id)}`;
@@ -98,6 +102,37 @@ function getFinalScore(movie) {
     return movie.rating * 10;
   }
   return 0;
+}
+
+function getScoreByMode(movie, mode) {
+  const summary = movie?.summaryScores ?? {};
+  if (mode === "personal") {
+    return safeScore(summary.personal);
+  }
+  if (mode === "art") {
+    return safeScore(summary.art);
+  }
+  if (mode === "external") {
+    return safeScore(summary.external);
+  }
+  return getFinalScore(movie);
+}
+
+function getScoreLabel(mode) {
+  if (mode === "personal") {
+    return "个人维度";
+  }
+  if (mode === "art") {
+    return "艺术维度";
+  }
+  if (mode === "external") {
+    return "外部维度";
+  }
+  return "最终得分";
+}
+
+function safeScore(value) {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
 function formatWatchDate(dateStr) {

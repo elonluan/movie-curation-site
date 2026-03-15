@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="帧间档案电影详情页。" />
-    <title>电影详情 | 帧间档案</title>
+    <meta name="description" content="帧间档案评分展厅。" />
+    <title>评分展厅 | 帧间档案</title>
     <link rel="stylesheet" href="/styles/main.css" />
   </head>
-  <body>
+  <body class="hall-theme score-theme">
     <div class="site-shell">
       <header class="site-header">
         <div class="header-inner">
@@ -21,13 +21,21 @@
       </header>
 
       <main class="main">
-        <a href="/movies.html" class="btn" style="margin-bottom: 24px;">← 返回展厅目录</a>
-        <section id="movie-detail" aria-live="polite"></section>
+        <section class="page-title reveal">
+          <span class="eyebrow">Hall III</span>
+          <h1>评分展厅</h1>
+          <p>按最终分或三大维度排序，分值显示与排序标准同步变化。</p>
+        </section>
+
+        <section class="section hall-stage" style="margin-top: 24px;">
+          <div id="score-sort-bar" class="filter-bar" aria-label="评分排序"></div>
+          <div id="score-grid" class="grid" aria-live="polite"></div>
+        </section>
       </main>
 
       <footer class="site-footer">Frame Archive · <span data-year></span></footer>
     </div>
 
-    <script type="module" src="/scripts/movie-detail.js"></script>
+    <script type="module" src="/scripts/hall-score.js"></script>
   </body>
 </html>

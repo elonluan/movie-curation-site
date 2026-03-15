@@ -10,14 +10,14 @@
     <title>帧间档案 | 个人电影策展站</title>
     <link rel="stylesheet" href="/styles/main.css" />
   </head>
-  <body>
+  <body class="museum-home">
     <div class="site-shell">
       <header class="site-header">
         <div class="header-inner">
           <a href="/" class="brand">Frame Archive</a>
           <nav class="nav" aria-label="主导航">
             <a href="/" aria-current="page">首页</a>
-            <a href="/movies.html">电影列表</a>
+            <a href="/movies.html">展厅</a>
             <a href="/about.html">About</a>
           </nav>
         </div>
@@ -28,13 +28,38 @@
           <span class="eyebrow">Personal Curated Cinema Shelf</span>
           <h1>帧间档案</h1>
           <p>
-            这不是评分工具，也不是信息数据库。这里更像一份持续更新的影像展览目录，
-            我用有限片单、关键词与简短注释，记录自己如何被电影触动、塑形与照亮。
+            一座个人胶片博物馆：你可以从标签索引进入主题藏柜，从胶片日历回看观影时序，
+            也可以在评分展厅里观察偏好结构如何被慢慢显影。
           </p>
           <div class="hero-actions">
-            <a class="btn primary" href="/movies.html">进入电影列表</a>
+            <a class="btn primary" href="/hall-tags.html">进入标签索引展厅</a>
+            <a class="btn" href="/hall-calendar.html">进入胶片日历展厅</a>
+            <a class="btn" href="/hall-score.html">进入评分展厅</a>
             <a class="btn" href="#featured">浏览精选入口</a>
-            <a class="btn" href="/about.html">关于这个档案馆</a>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2>展厅导览</h2>
+            <p>三条参观路径，对应三种观看方式。</p>
+          </div>
+          <div class="hall-entry-grid">
+            <a class="hall-entry-card tags reveal" href="/hall-tags.html">
+              <span class="hall-kicker">Hall I</span>
+              <h3>标签索引展厅</h3>
+              <p>按类型标签筛选，快速定位同类质感影片。</p>
+            </a>
+            <a class="hall-entry-card calendar reveal" href="/hall-calendar.html">
+              <span class="hall-kicker">Hall II</span>
+              <h3>胶片日历展厅</h3>
+              <p>按观影时间排序，回看每次观看发生的时刻。</p>
+            </a>
+            <a class="hall-entry-card score reveal" href="/hall-score.html">
+              <span class="hall-kicker">Hall III</span>
+              <h3>评分展厅</h3>
+              <p>按最终分或三大维度重排，观察你的评分重心。</p>
+            </a>
           </div>
         </section>
 

@@ -9,7 +9,7 @@ function renderNotFound() {
   const container = document.querySelector("#movie-detail");
   container.innerHTML = `
     <div class="empty">
-      未找到该电影条目。请从 <a href="/movies.html" style="text-decoration: underline;">电影列表页</a> 重新进入。
+      未找到该电影条目。请从 <a href="/movies.html" style="text-decoration: underline;">展厅目录</a> 重新进入。
     </div>
   `;
 }

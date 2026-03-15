@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/movies", "destination": "/movies.html" },
+    { "source": "/hall/tags", "destination": "/hall-tags.html" },
+    { "source": "/hall/calendar", "destination": "/hall-calendar.html" },
+    { "source": "/hall/score", "destination": "/hall-score.html" },
     { "source": "/movie", "destination": "/movie.html" },
     { "source": "/about", "destination": "/about.html" }
   ]
