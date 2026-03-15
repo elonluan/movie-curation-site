@@ -2,12 +2,40 @@ import { createMovieCard, loadMovies, mountYear } from "./common.js";
 
 const state = {
   movies: [],
-  activeCountry: "全部国家"
+  activeCountry: "全部国家",
+  activeTag: "全部"
 };
 
-function safeCountry(movie) {
-  const country = typeof movie?.country === "string" ? movie.country.trim() : "";
-  return country || "未知地区";
+function splitCountries(countryRaw) {
+  if (typeof countryRaw !== "string") {
+    return ["未知地区"];
+  }
+
+  const normalized = countryRaw
+    .replace(/\s+/g, "")
+    .replace(/／/g, "/")
+    .replace(/与/g, "/")
+    .replace(/、/g, "/")
+    .replace(/，/g, "/")
+    .replace(/,/g, "/")
+    .replace(/；/g, "/")
+    .replace(/;/g, "/")
+    .replace(/&/g, "/")
+    .replace(/\/+/g, "/");
+
+  const parts = normalized.split("/").map((part) => part.trim()).filter(Boolean);
+  if (!parts.length) {
+    return ["未知地区"];
+  }
+  return Array.from(new Set(parts));
+}
+
+function getMovieCountries(movie) {
+  return splitCountries(movie?.country ?? "");
+}
+
+function hasCountry(movie, country) {
+  return getMovieCountries(movie).includes(country);
 }
 
 function toTimestamp(movie) {
@@ -20,9 +48,11 @@ function toTimestamp(movie) {
 
 function getAllCountries(movies) {
   const counts = new Map();
+
   movies.forEach((movie) => {
-    const country = safeCountry(movie);
-    counts.set(country, (counts.get(country) || 0) + 1);
+    getMovieCountries(movie).forEach((country) => {
+      counts.set(country, (counts.get(country) || 0) + 1);
+    });
   });
 
   const ordered = [...counts.entries()]
@@ -36,6 +66,15 @@ function getAllCountries(movies) {
     .map(([country]) => country);
 
   return ["全部国家", ...ordered];
+}
+
+function getAllTags(movies) {
+  const tagSet = new Set();
+  movies.forEach((movie) => {
+    const tags = Array.isArray(movie.tags) ? movie.tags : [];
+    tags.forEach((tag) => tagSet.add(tag));
+  });
+  return ["全部", ...Array.from(tagSet)];
 }
 
 function renderCountryFilters() {
@@ -59,14 +98,37 @@ function renderCountryFilters() {
   });
 }
 
+function renderTagFilters() {
+  const bar = document.querySelector("#country-tag-filter-bar");
+  bar.innerHTML = "";
+
+  getAllTags(state.movies).forEach((tag) => {
+    const button = document.createElement("button");
+    button.className = "filter-btn";
+    button.type = "button";
+    button.textContent = tag;
+    button.classList.toggle("active", tag === state.activeTag);
+
+    button.addEventListener("click", () => {
+      state.activeTag = tag;
+      renderTagFilters();
+      renderHall();
+    });
+
+    bar.append(button);
+  });
+}
+
 function buildCountryGroups(movies) {
   const groups = new Map();
+
   movies.forEach((movie) => {
-    const country = safeCountry(movie);
-    if (!groups.has(country)) {
-      groups.set(country, []);
-    }
-    groups.get(country).push(movie);
+    getMovieCountries(movie).forEach((country) => {
+      if (!groups.has(country)) {
+        groups.set(country, []);
+      }
+      groups.get(country).push(movie);
+    });
   });
 
   const ordered = [...groups.entries()].sort((a, b) => {
@@ -83,21 +145,42 @@ function buildCountryGroups(movies) {
   }));
 }
 
+function byTag(movie) {
+  if (state.activeTag === "全部") {
+    return true;
+  }
+  const tags = Array.isArray(movie.tags) ? movie.tags : [];
+  return tags.includes(state.activeTag);
+}
+
+function byCountry(movie) {
+  if (state.activeCountry === "全部国家") {
+    return true;
+  }
+  return hasCountry(movie, state.activeCountry);
+}
+
 function renderHall() {
   const container = document.querySelector("#country-stream");
   container.innerHTML = "";
 
-  const filtered =
-    state.activeCountry === "全部国家"
-      ? state.movies
-      : state.movies.filter((movie) => safeCountry(movie) === state.activeCountry);
+  const filtered = state.movies.filter((movie) => byCountry(movie) && byTag(movie));
 
   if (!filtered.length) {
-    container.innerHTML = `<div class="empty">当前国家下暂无可展示的电影。</div>`;
+    container.innerHTML = `<div class="empty">当前筛选条件下暂无可展示的电影。</div>`;
     return;
   }
 
-  const groups = buildCountryGroups(filtered);
+  const groups =
+    state.activeCountry === "全部国家"
+      ? buildCountryGroups(filtered)
+      : [
+          {
+            country: state.activeCountry,
+            movies: [...filtered].sort((a, b) => toTimestamp(b) - toTimestamp(a))
+          }
+        ];
+
   let revealIndex = 0;
 
   groups.forEach(({ country, movies }, groupIndex) => {
@@ -139,6 +222,7 @@ async function init() {
   try {
     state.movies = await loadMovies();
     renderCountryFilters();
+    renderTagFilters();
     renderHall();
   } catch (error) {
     console.error(error);

@@ -681,9 +681,13 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  padding: 0 8px;
 }
 
 .filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: rgba(48, 38, 31, 0.76);
@@ -707,6 +711,10 @@ img {
 }
 
 #score-tag-filter-bar {
+  margin-top: -8px;
+}
+
+#country-tag-filter-bar {
   margin-top: -8px;
 }
 
