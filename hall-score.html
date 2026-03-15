@@ -29,7 +29,7 @@
 
         <section class="section hall-stage" style="margin-top: 24px;">
           <div id="score-sort-bar" class="filter-bar" aria-label="评分排序"></div>
-          <div id="score-grid" class="grid" aria-live="polite"></div>
+          <div id="score-grid" class="score-bucket-board" aria-live="polite"></div>
         </section>
 
         <section class="section cross-hall-nav">
@@ -51,6 +51,17 @@
           </div>
         </section>
       </main>
+
+      <nav class="hall-float-switch" aria-label="快捷切换展厅">
+        <a class="float-switch left tags" href="/hall-tags.html" aria-label="前往标签索引展厅">
+          <span>Hall I</span>
+          标签
+        </a>
+        <a class="float-switch right calendar" href="/hall-calendar.html" aria-label="前往胶片日历展厅">
+          <span>Hall II</span>
+          日历
+        </a>
+      </nav>
 
       <footer class="site-footer">Frame Archive · <span data-year></span></footer>
     </div>

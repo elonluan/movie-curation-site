@@ -12,6 +12,11 @@ const state = {
   mode: "total"
 };
 
+function modeLabel(mode) {
+  const option = SORT_OPTIONS.find((item) => item.key === mode);
+  return option?.label ?? "最终得分";
+}
+
 function scoreOf(movie, mode) {
   const summary = movie.summaryScores ?? {};
   if (mode === "personal") {
@@ -38,6 +43,21 @@ function safe(value) {
   return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
+function bucketStart(score) {
+  const normalized = Math.max(0, Math.min(100, Math.floor(score)));
+  if (normalized === 100) {
+    return 100;
+  }
+  return Math.floor(normalized / 10) * 10;
+}
+
+function bucketLabel(start) {
+  if (start === 100) {
+    return "100 分档";
+  }
+  return `${start}-${start + 9} 分档`;
+}
+
 function renderSortBar() {
   const bar = document.querySelector("#score-sort-bar");
   bar.innerHTML = "";
@@ -60,8 +80,8 @@ function renderSortBar() {
 }
 
 function renderHall() {
-  const grid = document.querySelector("#score-grid");
-  grid.innerHTML = "";
+  const board = document.querySelector("#score-grid");
+  board.innerHTML = "";
 
   const sorted = [...state.movies].sort((a, b) => {
     const diff = scoreOf(b, state.mode) - scoreOf(a, state.mode);
@@ -72,15 +92,54 @@ function renderHall() {
   });
 
   if (!sorted.length) {
-    grid.innerHTML = `<div class="empty">暂无可展示的评分结果。</div>`;
+    board.innerHTML = `<div class="empty">暂无可展示的评分结果。</div>`;
     return;
   }
 
-  sorted.forEach((movie, index) => {
-    const card = createMovieCard(movie, { scoreMode: state.mode });
-    card.classList.add("reveal");
-    card.style.animationDelay = `${index * 20}ms`;
-    grid.append(card);
+  const buckets = new Map();
+  sorted.forEach((movie) => {
+    const start = bucketStart(scoreOf(movie, state.mode));
+    if (!buckets.has(start)) {
+      buckets.set(start, []);
+    }
+    buckets.get(start).push(movie);
+  });
+
+  const orderedBuckets = [...buckets.keys()].sort((a, b) => b - a);
+  let revealIndex = 0;
+
+  orderedBuckets.forEach((start, bucketIndex) => {
+    const movies = buckets.get(start) ?? [];
+    const section = document.createElement("section");
+    section.className = "score-bucket reveal";
+    section.style.animationDelay = `${bucketIndex * 36}ms`;
+
+    const head = document.createElement("div");
+    head.className = "score-bucket-head";
+
+    const title = document.createElement("h3");
+    title.className = "score-bucket-title";
+    title.textContent = bucketLabel(start);
+
+    const meta = document.createElement("p");
+    meta.className = "score-bucket-meta";
+    meta.textContent = `${modeLabel(state.mode)} · ${movies.length} 部`;
+
+    head.append(title, meta);
+
+    const grid = document.createElement("div");
+    grid.className = "grid score-bucket-grid";
+
+    movies.forEach((movie) => {
+      const card = createMovieCard(movie, { scoreMode: state.mode });
+      card.classList.add("reveal");
+      card.style.animationDelay = `${revealIndex * 14}ms`;
+      revealIndex += 1;
+      grid.append(card);
+    });
+
+    section.append(head, grid);
+    board.append(section);
   });
 }
 

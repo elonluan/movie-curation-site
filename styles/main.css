@@ -218,16 +218,26 @@ img {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+  padding: 14px;
+  border-radius: 24px;
+  border: 1px solid rgba(223, 188, 138, 0.28);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 220, 170, 0.09), transparent 42%),
+    linear-gradient(140deg, rgba(44, 34, 27, 0.92), rgba(28, 22, 18, 0.86));
 }
 
 .hero-hall-card {
   position: relative;
-  display: block;
-  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  aspect-ratio: 3 / 4;
+  min-height: 320px;
   padding: clamp(22px, 2.4vw, 30px);
   border-radius: 24px;
   border: 1px solid var(--line);
   overflow: hidden;
+  isolation: isolate;
   box-shadow: 0 22px 38px rgba(0, 0, 0, 0.3);
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
 }
@@ -247,22 +257,52 @@ img {
   );
 }
 
+.hero-hall-card::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(249, 230, 196, 0.34);
+  box-shadow:
+    inset 0 0 34px rgba(255, 224, 171, 0.18),
+    0 0 26px rgba(247, 188, 112, 0.2);
+  pointer-events: none;
+}
+
+.hero-hall-card > * {
+  position: relative;
+  z-index: 1;
+}
+
 .hero-hall-card:hover {
   transform: translateY(-8px);
   border-color: rgba(245, 214, 162, 0.62);
-  box-shadow: 0 30px 44px rgba(0, 0, 0, 0.38);
+  box-shadow:
+    0 30px 44px rgba(0, 0, 0, 0.38),
+    0 0 30px rgba(251, 200, 133, 0.3);
 }
 
 .hero-hall-card.tags {
-  background: linear-gradient(160deg, #453122, #2c231b);
+  background:
+    radial-gradient(circle at 66% 20%, rgba(255, 224, 177, 0.18), transparent 42%),
+    linear-gradient(160deg, #4a3424, #2d231a);
 }
 
 .hero-hall-card.calendar {
-  background: linear-gradient(160deg, #2b4253, #1f313f);
+  background:
+    radial-gradient(circle at 64% 18%, rgba(188, 224, 247, 0.18), transparent 42%),
+    linear-gradient(160deg, #2f4657, #1f303d);
 }
 
 .hero-hall-card.score {
-  background: linear-gradient(160deg, #4a2d30, #312123);
+  background:
+    radial-gradient(circle at 62% 18%, rgba(244, 199, 179, 0.2), transparent 42%),
+    linear-gradient(160deg, #533136, #332123);
+}
+
+.hero-hall-card .hall-kicker {
+  color: rgba(252, 237, 213, 0.92);
+  text-shadow: 0 0 10px rgba(251, 201, 129, 0.4);
 }
 
 .hero-hall-card h3 {
@@ -270,6 +310,7 @@ img {
   font-family: "Bodoni Moda", serif;
   font-size: clamp(1.4rem, 2.5vw, 1.9rem);
   color: #f8e9c9;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .hero-hall-card p {
@@ -420,6 +461,125 @@ img {
 
 .cross-hall-grid .hall-entry-card {
   min-height: 176px;
+}
+
+.hall-float-switch {
+  pointer-events: none;
+}
+
+.float-switch {
+  pointer-events: auto;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 38;
+  width: 64px;
+  min-height: 132px;
+  padding: 12px 6px;
+  border: 1px solid var(--line);
+  color: #f6ebd3;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.83rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  background: rgba(33, 28, 24, 0.88);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.22s ease, border-color 0.22s ease, filter 0.22s ease;
+}
+
+.float-switch span {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: rgba(244, 223, 189, 0.78);
+}
+
+.float-switch.left {
+  left: 10px;
+  border-radius: 0 14px 14px 0;
+}
+
+.float-switch.right {
+  right: 10px;
+  border-radius: 14px 0 0 14px;
+}
+
+.float-switch:hover {
+  border-color: var(--accent-strong);
+  filter: saturate(1.1) brightness(1.06);
+}
+
+.float-switch.left:hover {
+  transform: translateY(-50%) translateX(4px);
+}
+
+.float-switch.right:hover {
+  transform: translateY(-50%) translateX(-4px);
+}
+
+.float-switch.tags {
+  background: linear-gradient(160deg, rgba(73, 52, 36, 0.95), rgba(43, 31, 23, 0.92));
+}
+
+.float-switch.calendar {
+  background: linear-gradient(160deg, rgba(47, 71, 89, 0.95), rgba(32, 47, 60, 0.92));
+}
+
+.float-switch.score {
+  background: linear-gradient(160deg, rgba(82, 48, 52, 0.95), rgba(52, 32, 35, 0.92));
+}
+
+.score-bucket-board {
+  display: grid;
+  gap: 24px;
+}
+
+.score-bucket {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(155deg, rgba(58, 37, 40, 0.74), rgba(31, 23, 24, 0.78)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+}
+
+.score-bucket-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.score-bucket-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-family: "Bodoni Moda", serif;
+  letter-spacing: 0.03em;
+  color: #f8dfd8;
+}
+
+.score-bucket-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(241, 197, 184, 0.78);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+.score-bucket-grid {
+  gap: 18px;
 }
 
 .grid {
@@ -762,10 +922,12 @@ img {
 @media (max-width: 980px) {
   .hero-hall-links {
     grid-template-columns: 1fr;
+    padding: 10px;
   }
 
   .hero-hall-card {
-    min-height: 184px;
+    aspect-ratio: auto;
+    min-height: 244px;
   }
 
   .detail-layout {
@@ -789,6 +951,25 @@ img {
     padding: 34px 24px;
   }
 
+  .float-switch {
+    width: 54px;
+    min-height: 112px;
+    padding: 10px 4px;
+    font-size: 0.75rem;
+  }
+
+  .float-switch span {
+    font-size: 0.58rem;
+  }
+
+  .float-switch.left {
+    left: 4px;
+  }
+
+  .float-switch.right {
+    right: 4px;
+  }
+
   .cross-hall-grid {
     grid-template-columns: 1fr;
   }
@@ -804,6 +985,18 @@ img {
 }
 
 @media (max-width: 460px) {
+  .float-switch {
+    top: 62%;
+    width: 48px;
+    min-height: 96px;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+
+  .float-switch span {
+    display: none;
+  }
+
   .grid {
     grid-template-columns: 1fr;
   }
