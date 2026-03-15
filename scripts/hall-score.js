@@ -9,12 +9,22 @@ const SORT_OPTIONS = [
 
 const state = {
   movies: [],
-  mode: "total"
+  mode: "total",
+  activeTag: "全部"
 };
 
 function modeLabel(mode) {
   const option = SORT_OPTIONS.find((item) => item.key === mode);
   return option?.label ?? "最终得分";
+}
+
+function getAllTags(movies) {
+  const tagSet = new Set();
+  movies.forEach((movie) => {
+    const tags = Array.isArray(movie.tags) ? movie.tags : [];
+    tags.forEach((tag) => tagSet.add(tag));
+  });
+  return ["全部", ...Array.from(tagSet)];
 }
 
 function scoreOf(movie, mode) {
@@ -79,11 +89,37 @@ function renderSortBar() {
   });
 }
 
+function renderTagFilters() {
+  const bar = document.querySelector("#score-tag-filter-bar");
+  bar.innerHTML = "";
+
+  getAllTags(state.movies).forEach((tag) => {
+    const button = document.createElement("button");
+    button.className = "filter-btn";
+    button.type = "button";
+    button.textContent = tag;
+    button.classList.toggle("active", tag === state.activeTag);
+
+    button.addEventListener("click", () => {
+      state.activeTag = tag;
+      renderTagFilters();
+      renderHall();
+    });
+
+    bar.append(button);
+  });
+}
+
 function renderHall() {
   const board = document.querySelector("#score-grid");
   board.innerHTML = "";
 
-  const sorted = [...state.movies].sort((a, b) => {
+  const filtered =
+    state.activeTag === "全部"
+      ? state.movies
+      : state.movies.filter((movie) => (Array.isArray(movie.tags) ? movie.tags : []).includes(state.activeTag));
+
+  const sorted = [...filtered].sort((a, b) => {
     const diff = scoreOf(b, state.mode) - scoreOf(a, state.mode);
     if (diff !== 0) {
       return diff;
@@ -92,7 +128,7 @@ function renderHall() {
   });
 
   if (!sorted.length) {
-    board.innerHTML = `<div class="empty">暂无可展示的评分结果。</div>`;
+    board.innerHTML = `<div class="empty">当前标签下暂无可展示的评分结果。</div>`;
     return;
   }
 
@@ -148,6 +184,7 @@ async function init() {
   try {
     state.movies = await loadMovies();
     renderSortBar();
+    renderTagFilters();
     renderHall();
   } catch (error) {
     console.error(error);

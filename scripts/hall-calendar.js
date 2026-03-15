@@ -1,5 +1,40 @@
 import { createMovieCard, loadMovies, mountYear } from "./common.js";
 
+const state = {
+  movies: [],
+  activeTag: "全部"
+};
+
+function getAllTags(movies) {
+  const tagSet = new Set();
+  movies.forEach((movie) => {
+    const tags = Array.isArray(movie.tags) ? movie.tags : [];
+    tags.forEach((tag) => tagSet.add(tag));
+  });
+  return ["全部", ...Array.from(tagSet)];
+}
+
+function renderTagFilters() {
+  const bar = document.querySelector("#calendar-tag-filter-bar");
+  bar.innerHTML = "";
+
+  getAllTags(state.movies).forEach((tag) => {
+    const button = document.createElement("button");
+    button.className = "filter-btn";
+    button.type = "button";
+    button.textContent = tag;
+    button.classList.toggle("active", tag === state.activeTag);
+
+    button.addEventListener("click", () => {
+      state.activeTag = tag;
+      renderTagFilters();
+      renderHall();
+    });
+
+    bar.append(button);
+  });
+}
+
 function toTimestamp(movie) {
   if (!movie.watchDate) {
     return Number.NEGATIVE_INFINITY;
@@ -21,13 +56,18 @@ function groupKey(movie) {
   return `${y}-${m}`;
 }
 
-function renderHall(movies) {
+function renderHall() {
   const container = document.querySelector("#calendar-stream");
   container.innerHTML = "";
 
-  const sorted = [...movies].sort((a, b) => toTimestamp(b) - toTimestamp(a));
+  const filtered =
+    state.activeTag === "全部"
+      ? state.movies
+      : state.movies.filter((movie) => (Array.isArray(movie.tags) ? movie.tags : []).includes(state.activeTag));
+
+  const sorted = [...filtered].sort((a, b) => toTimestamp(b) - toTimestamp(a));
   if (!sorted.length) {
-    container.innerHTML = `<div class="empty">暂无可展示的观影记录。</div>`;
+    container.innerHTML = `<div class="empty">当前标签下暂无可展示的观影记录。</div>`;
     return;
   }
 
@@ -69,8 +109,9 @@ function renderHall(movies) {
 async function init() {
   mountYear();
   try {
-    const movies = await loadMovies();
-    renderHall(movies);
+    state.movies = await loadMovies();
+    renderTagFilters();
+    renderHall();
   } catch (error) {
     console.error(error);
     document.querySelector("#calendar-stream").innerHTML = `<div class="empty">电影数据读取失败，请检查 /data/movies.json。</div>`;

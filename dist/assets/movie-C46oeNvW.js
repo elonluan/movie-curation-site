@@ -1,4 +1,4 @@
-import{m as o,l as d,p as u}from"./common-ETJScwMo.js";function p(){return new URLSearchParams(window.location.search).get("id")}function c(){const a=document.querySelector("#movie-detail");a.innerHTML=`
+import{m as o,l as d,p as u}from"./common-7Er4mmxB.js";function p(){return new URLSearchParams(window.location.search).get("id")}function c(){const a=document.querySelector("#movie-detail");a.innerHTML=`
     <div class="empty">
       未找到该电影条目。请从 <a href="/movies.html" style="text-decoration: underline;">展厅目录</a> 重新进入。
     </div>

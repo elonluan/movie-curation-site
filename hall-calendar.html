@@ -24,10 +24,11 @@
         <section class="page-title reveal">
           <span class="eyebrow">Hall II</span>
           <h1>胶片日历展厅</h1>
-          <p>按观影日期由近到远，回看你和电影相遇的时间线。</p>
+          <p>按观影日期由近到远排序，并可随时按标签筛选时间线。</p>
         </section>
 
         <section class="section hall-stage" style="margin-top: 24px;">
+          <div id="calendar-tag-filter-bar" class="filter-bar" aria-label="标签筛选"></div>
           <div id="calendar-stream" class="calendar-stream" aria-live="polite"></div>
         </section>
 
@@ -39,8 +40,8 @@
           <div class="cross-hall-grid">
             <a class="hall-entry-card tags" href="/hall-tags.html">
               <span class="hall-kicker">Hall I</span>
-              <h3>前往标签索引展厅</h3>
-              <p>按标签聚类筛选，寻找同类气质电影。</p>
+              <h3>前往光影地图展厅</h3>
+              <p>按国家分类浏览，查看观影分布。</p>
             </a>
             <a class="hall-entry-card score" href="/hall-score.html">
               <span class="hall-kicker">Hall III</span>
@@ -52,9 +53,9 @@
       </main>
 
       <nav class="hall-float-switch" aria-label="快捷切换展厅">
-        <a class="float-switch left tags" href="/hall-tags.html" aria-label="前往标签索引展厅">
+        <a class="float-switch left tags" href="/hall-tags.html" aria-label="前往光影地图展厅">
           <span>Hall I</span>
-          标签
+          地图
         </a>
         <a class="float-switch right score" href="/hall-score.html" aria-label="前往评分展厅">
           <span>Hall III</span>

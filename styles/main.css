@@ -706,8 +706,56 @@ img {
   color: #fff3df;
 }
 
+#score-tag-filter-bar {
+  margin-top: -8px;
+}
+
 .page-title {
   margin-bottom: 22px;
+}
+
+.country-stream {
+  display: grid;
+  gap: 24px;
+}
+
+.country-group {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(150deg, rgba(58, 41, 31, 0.62), rgba(35, 26, 20, 0.72)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 16px
+    );
+}
+
+.country-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.country-name {
+  margin: 0;
+  font-family: "Bodoni Moda", serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.03em;
+}
+
+.country-meta {
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(236, 215, 181, 0.78);
 }
 
 .calendar-stream {

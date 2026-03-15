@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="帧间档案评分展厅。" />
     <title>评分展厅 | 帧间档案</title>
-    <script type="module" crossorigin src="/assets/hallScore-KOYxtvWW.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/common-ETJScwMo.js">
-    <link rel="stylesheet" crossorigin href="/assets/common-B8q-XTf8.css">
+    <script type="module" crossorigin src="/assets/hallScore-Bgj34FKz.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/common-7Er4mmxB.js">
+    <link rel="stylesheet" crossorigin href="/assets/common-DEIBv6TM.css">
   </head>
   <body class="hall-theme score-theme">
     <div class="site-shell">
@@ -26,11 +26,12 @@
         <section class="page-title reveal">
           <span class="eyebrow">Hall III</span>
           <h1>评分展厅</h1>
-          <p>按最终分或三大维度排序，分值显示与排序标准同步变化。</p>
+          <p>按最终分或三大维度排序，并可叠加标签筛选查看评分结构。</p>
         </section>
 
         <section class="section hall-stage" style="margin-top: 24px;">
           <div id="score-sort-bar" class="filter-bar" aria-label="评分排序"></div>
+          <div id="score-tag-filter-bar" class="filter-bar" aria-label="标签筛选"></div>
           <div id="score-grid" class="score-bucket-board" aria-live="polite"></div>
         </section>
 
@@ -42,8 +43,8 @@
           <div class="cross-hall-grid">
             <a class="hall-entry-card tags" href="/hall-tags.html">
               <span class="hall-kicker">Hall I</span>
-              <h3>前往标签索引展厅</h3>
-              <p>按标签组合快速切换电影视角。</p>
+              <h3>前往光影地图展厅</h3>
+              <p>按国家分类快速切换电影视角。</p>
             </a>
             <a class="hall-entry-card calendar" href="/hall-calendar.html">
               <span class="hall-kicker">Hall II</span>
@@ -55,9 +56,9 @@
       </main>
 
       <nav class="hall-float-switch" aria-label="快捷切换展厅">
-        <a class="float-switch left tags" href="/hall-tags.html" aria-label="前往标签索引展厅">
+        <a class="float-switch left tags" href="/hall-tags.html" aria-label="前往光影地图展厅">
           <span>Hall I</span>
-          标签
+          地图
         </a>
         <a class="float-switch right calendar" href="/hall-calendar.html" aria-label="前往胶片日历展厅">
           <span>Hall II</span>
