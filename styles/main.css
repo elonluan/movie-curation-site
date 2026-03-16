@@ -634,6 +634,13 @@ img {
   color: #f6e8ca;
 }
 
+.card-logline {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(236, 217, 188, 0.88);
+}
+
 .card-subtitle {
   margin: 4px 0 0;
   color: var(--ink-soft);
@@ -910,6 +917,13 @@ img {
   color: rgba(230, 201, 191, 0.84);
 }
 
+.score-top-logline {
+  margin-top: 5px;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: rgba(240, 217, 208, 0.9);
+}
+
 .score-rank-list {
   display: grid;
   gap: 9px;
@@ -1027,6 +1041,13 @@ img {
   margin: 0;
   font-size: 0.98rem;
   color: #f6dfd7;
+}
+
+.score-rank-logline {
+  margin: 5px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.52;
+  color: rgba(237, 211, 201, 0.9);
 }
 
 .score-rank-tier {
@@ -1964,6 +1985,17 @@ img {
   line-height: 1.24;
 }
 
+.poster-flow-logline {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: rgba(205, 224, 239, 0.84);
+}
+
+.poster-flow-item.is-featured .poster-flow-logline {
+  font-size: 0.86rem;
+}
+
 .poster-flow-venue {
   margin: 0;
   font-size: 0.76rem;
@@ -2153,15 +2185,93 @@ img {
   font-size: 0.96rem;
 }
 
-.logline {
-  margin-top: 26px;
+.detail-logline {
+  margin: 10px 0 0;
   font-size: 1.14rem;
   line-height: 1.8;
+  color: rgba(238, 221, 195, 0.96);
 }
 
 .note {
   margin-top: 14px;
   color: var(--ink-soft);
+}
+
+.note-markdown {
+  margin-top: 22px;
+}
+
+.note-markdown h2 {
+  margin: 0 0 10px;
+  font-family: "Bodoni Moda", serif;
+  font-size: 1.04rem;
+  color: #f4e2c4;
+}
+
+.note-markdown-body {
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  line-height: 1.8;
+}
+
+.note-markdown-body p {
+  margin: 0 0 12px;
+}
+
+.note-markdown-body h1,
+.note-markdown-body h2,
+.note-markdown-body h3,
+.note-markdown-body h4 {
+  margin: 18px 0 8px;
+  font-family: "Bodoni Moda", serif;
+  line-height: 1.4;
+  color: #f4e1c3;
+}
+
+.note-markdown-body ul,
+.note-markdown-body ol {
+  margin: 8px 0 14px;
+  padding-left: 20px;
+}
+
+.note-markdown-body li {
+  margin: 4px 0;
+}
+
+.note-markdown-body blockquote {
+  margin: 12px 0;
+  padding: 6px 12px;
+  border-left: 2px solid rgba(214, 180, 134, 0.42);
+  background: rgba(43, 34, 26, 0.44);
+  color: rgba(222, 205, 182, 0.9);
+}
+
+.note-markdown-body a {
+  color: #e8c287;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.note-markdown-body code {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.88em;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: rgba(42, 35, 28, 0.75);
+}
+
+.note-markdown-body pre {
+  margin: 12px 0;
+  padding: 10px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid rgba(201, 171, 131, 0.2);
+  background: rgba(28, 24, 20, 0.84);
+}
+
+.note-markdown-body pre code {
+  padding: 0;
+  background: transparent;
 }
 
 .score-panel {

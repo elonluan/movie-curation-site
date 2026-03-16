@@ -57,7 +57,7 @@ if (!token) {
 }
 
 const pages = await queryAllMovies({ token, databaseId, onlyOnsite });
-const transformed = transformPages(pages);
+const transformed = await transformPages(pages, { token });
 await fs.writeFile(OUTPUT_PATH, `${JSON.stringify(transformed, null, 2)}\n`, "utf8");
 
 console.log(
@@ -109,16 +109,21 @@ async function queryAllMovies({ token: notionToken, databaseId: dbId, onlyOnsite
   return pages;
 }
 
-function transformPages(pages) {
+async function transformPages(pages, { token: notionToken }) {
   const usedIds = new Set();
+  const movies = [];
 
-  return pages
-    .map((page) => toMovie(page, usedIds))
-    .filter(Boolean)
-    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+  for (const page of pages) {
+    const movie = await toMovie(page, usedIds, { token: notionToken });
+    if (movie) {
+      movies.push(movie);
+    }
+  }
+
+  return movies.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
 }
 
-function toMovie(page, usedIds) {
+async function toMovie(page, usedIds, { token: notionToken }) {
   const p = page.properties ?? {};
 
   const titleZh = getTitle(p["电影名"]).trim();
@@ -143,6 +148,11 @@ function toMovie(page, usedIds) {
   const dimensionScores = collectDimensionScores(p);
   const summaryScores = collectSummaryScores(p, dimensionScores);
   const coreDimension = normalizeCoreDimension(getFormulaString(p["核心维度"])) || inferCoreDimension(summaryScores);
+  const note = await readPageBodyNote({
+    token: notionToken,
+    pageId: page.id,
+    fallback: ""
+  });
 
   const movie = {
     id,
@@ -154,7 +164,7 @@ function toMovie(page, usedIds) {
     rating: deriveDisplayRating(summaryScores, p),
     tags: normalizeTags(typeTags),
     logline: getRichText(p["一句话短评"]).trim() || "",
-    note: getRichText(p["网站说明"]).trim() || "",
+    note,
     watchDate,
     posterTone: pickPosterTone(id),
     featured: getCheckbox(p["首页精选"]),
@@ -171,6 +181,153 @@ function toMovie(page, usedIds) {
   }
 
   return movie;
+}
+
+async function readPageBodyNote({ token: notionToken, pageId, fallback = "" }) {
+  if (!notionToken || !pageId) {
+    return fallback;
+  }
+
+  try {
+    const blocks = await fetchAllBlockChildren({ token: notionToken, blockId: pageId });
+    const lines = await flattenBlockLines({ token: notionToken, blocks, depth: 0 });
+    const text = lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    return text || fallback;
+  } catch (error) {
+    console.warn(`[sync:notion] 页面正文读取失败 (${pageId}): ${error.message}`);
+    return fallback;
+  }
+}
+
+async function flattenBlockLines({ token: notionToken, blocks, depth }) {
+  const lines = [];
+
+  for (const block of blocks) {
+    const line = blockToLine(block, depth);
+    if (line) {
+      lines.push(line);
+    }
+
+    if (block.has_children && depth < 4) {
+      const children = await fetchAllBlockChildren({ token: notionToken, blockId: block.id });
+      const childLines = await flattenBlockLines({
+        token: notionToken,
+        blocks: children,
+        depth: depth + 1
+      });
+      lines.push(...childLines);
+    }
+  }
+
+  return lines;
+}
+
+function blockToLine(block, depth) {
+  if (!block || !block.type) {
+    return "";
+  }
+
+  const indent = "  ".repeat(depth);
+  const richText = readBlockRichText(block);
+  const text = normalizeLineBreaks(richText).trim();
+  if (!text) {
+    return "";
+  }
+
+  if (block.type === "heading_1") {
+    return `${indent}# ${text}`;
+  }
+
+  if (block.type === "heading_2") {
+    return `${indent}## ${text}`;
+  }
+
+  if (block.type === "heading_3") {
+    return `${indent}### ${text}`;
+  }
+
+  if (block.type === "bulleted_list_item" || block.type === "numbered_list_item") {
+    return `${indent}- ${text}`;
+  }
+
+  if (block.type === "to_do") {
+    const checked = Boolean(block.to_do?.checked);
+    return `${indent}${checked ? "[x]" : "[ ]"} ${text}`;
+  }
+
+  if (block.type === "quote") {
+    return `${indent}> ${text}`;
+  }
+
+  return `${indent}${text}`;
+}
+
+function readBlockRichText(block) {
+  const type = block?.type;
+  if (!type) {
+    return "";
+  }
+
+  const payload = block[type];
+  if (!payload) {
+    return "";
+  }
+
+  if (Array.isArray(payload.rich_text)) {
+    return joinRichText(payload.rich_text);
+  }
+
+  if (type === "table_row" && Array.isArray(payload.cells)) {
+    return payload.cells.map((cell) => joinRichText(cell)).filter(Boolean).join(" | ");
+  }
+
+  if (type === "child_page") {
+    return payload.title ?? "";
+  }
+
+  return "";
+}
+
+function joinRichText(richText) {
+  if (!Array.isArray(richText)) {
+    return "";
+  }
+  return richText.map((item) => item?.plain_text || "").join("");
+}
+
+function normalizeLineBreaks(text) {
+  return String(text || "").replace(/\r\n?/g, "\n");
+}
+
+async function fetchAllBlockChildren({ token: notionToken, blockId }) {
+  const all = [];
+  let nextCursor;
+
+  do {
+    const params = new URLSearchParams({ page_size: "100" });
+    if (nextCursor) {
+      params.set("start_cursor", nextCursor);
+    }
+
+    const response = await fetch(`https://api.notion.com/v1/blocks/${blockId}/children?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${notionToken}`,
+        "Notion-Version": NOTION_VERSION
+      }
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`[sync:notion] 读取 block children 失败 (${response.status}): ${text}`);
+    }
+
+    const json = await response.json();
+    all.push(...(json.results || []));
+    nextCursor = json.has_more ? json.next_cursor : undefined;
+  } while (nextCursor);
+
+  return all;
 }
 
 function collectDimensionScores(properties) {

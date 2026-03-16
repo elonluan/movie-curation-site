@@ -263,12 +263,14 @@ function renderTopCards(list) {
         .map((movie, idx) => {
           const profile = movie._scoreProfile;
           const score = scoreOf(movie, state.mode);
+          const logline = String(movie.logline || "").trim();
           return `
             <a class="score-top-card" href="/movie.html?id=${encodeURIComponent(movie.id)}">
               <span class="score-top-rank">#${idx + 1}</span>
               <div class="score-top-poster"><img src="${pickPoster(movie)}" alt="${movie.titleZh} 海报" loading="lazy" /></div>
               <div class="score-top-body">
                 <h3>${movie.titleZh}</h3>
+                ${logline ? `<p class="score-top-logline">${logline}</p>` : ""}
                 <p>${modeLabel(state.mode)} ${formatScore(score)} · 最终 ${formatScore(profile.final)}</p>
                 <p>${dominantLabel(profile)} · ${formatWatchDate(movie.watchDate)}</p>
               </div>
@@ -285,6 +287,7 @@ function rowMarkup(movie, rank) {
   const currentScore = scoreOf(movie, state.mode);
   const tier = tierByScore(currentScore);
   const tags = Array.isArray(movie.tags) ? movie.tags.slice(0, 3) : [];
+  const logline = String(movie.logline || "").trim();
 
   return `
     <a class="score-rank-row" href="/movie.html?id=${encodeURIComponent(movie.id)}">
@@ -297,6 +300,7 @@ function rowMarkup(movie, rank) {
           <h3>${movie.titleZh}</h3>
           <span class="score-rank-tier tier-${tier}">${tier}</span>
         </div>
+        ${logline ? `<p class="score-rank-logline">${logline}</p>` : ""}
         <p class="score-rank-meta">${modeLabel(state.mode)} ${formatScore(currentScore)} · 最终 ${formatScore(profile.final)} · ${formatWatchDate(movie.watchDate)}</p>
         <div class="score-rank-bars">
           <span class="rank-bar personal${state.mode === "personal" ? " active" : ""}" style="--w:${profile.personal}%;">个 ${formatScore(profile.personal)}</span>

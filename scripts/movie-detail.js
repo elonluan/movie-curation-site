@@ -1,4 +1,6 @@
 import { loadMovies, mountYear, pickPoster } from "./common.js";
+import DOMPurify from "dompurify";
+import { marked } from "marked";
 
 function readMovieId() {
   const params = new URLSearchParams(window.location.search);
@@ -9,7 +11,7 @@ function renderNotFound() {
   const container = document.querySelector("#movie-detail");
   container.innerHTML = `
     <div class="empty">
-      未找到该电影条目。请从 <a href="/movies.html" style="text-decoration: underline;">展厅目录</a> 重新进入。
+      未找到该电影条目。请从 <a href="/" style="text-decoration: underline;">首页</a> 重新进入。
     </div>
   `;
 }
@@ -61,6 +63,8 @@ function renderMovie(movie) {
   const tags = movie.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
   const finalScore = getFinalScore(movie);
   const watchDate = formatWatchDate(movie.watchDate);
+  const logline = String(movie.logline || "").trim();
+  const reviewHtml = movie.note ? renderMarkdownToHtml(movie.note) : "";
 
   container.innerHTML = `
     <article class="detail-layout reveal">
@@ -70,6 +74,7 @@ function renderMovie(movie) {
       <div class="detail-info">
         <h1>${movie.titleZh}</h1>
         <div class="detail-original">${movie.titleOriginal}</div>
+        ${logline ? `<p class="detail-logline">${logline}</p>` : ""}
 
         <ul class="meta-list">
           <li><span class="meta-label">年份</span><span class="meta-value">${movie.year}</span></li>
@@ -77,17 +82,38 @@ function renderMovie(movie) {
           <li><span class="meta-label">导演</span><span class="meta-value">${movie.director}</span></li>
           <li><span class="meta-label">最终得分</span><span class="meta-value">${finalScore.toFixed(1)} / 100</span></li>
           <li><span class="meta-label">观影日期</span><span class="meta-value">${watchDate}</span></li>
-          <li><span class="meta-label">我的评分</span><span class="meta-value">${movie.rating} / 10</span></li>
         </ul>
 
         ${renderSummarySection(movie)}
 
         <div class="tag-row">${tags}</div>
-        <p class="logline">${movie.logline}</p>
-        ${movie.note ? `<p class="note">${movie.note}</p>` : ""}
+        ${
+          reviewHtml
+            ? `<section class="note note-markdown">
+                <h2>完整影评</h2>
+                <div class="note-markdown-body">${reviewHtml}</div>
+              </section>`
+            : ""
+        }
       </div>
     </article>
   `;
+}
+
+function renderMarkdownToHtml(markdown) {
+  const source = String(markdown || "").trim();
+  if (!source) {
+    return "";
+  }
+
+  const html = marked.parse(source, {
+    gfm: true,
+    breaks: true
+  });
+
+  return DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true }
+  });
 }
 
 async function initDetailPage() {

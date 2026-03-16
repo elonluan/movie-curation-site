@@ -376,6 +376,7 @@ function renderPosterStage(dayEntry, animate = true) {
     const posterSrc = pickPoster(movie);
     const dateLabel = dayEntry.isUndated ? "未记录日期" : dayEntry.dayKey;
     const scoreText = movie._score > 0 ? `${Math.round(movie._score)} 分` : "未评分";
+    const logline = String(movie.logline || "").trim();
 
     const card = document.createElement("a");
     card.className = `poster-flow-item ${dayEntry.venueType} ${movie._isTheatrical ? "theatrical" : "non-theatrical"}${index === 0 ? " is-featured" : ""}`;
@@ -390,6 +391,7 @@ function renderPosterStage(dayEntry, animate = true) {
       <div class="poster-flow-caption">
         <p class="poster-flow-date">${dateLabel} · ${scoreText}</p>
         <p class="poster-flow-title">《${title}》</p>
+        ${logline ? `<p class="poster-flow-logline">${logline}</p>` : ""}
         <p class="poster-flow-venue">
           <span class="poster-flow-badge ${movie._isTheatrical ? "theatrical" : "non-theatrical"}">${movieVenueLabel(movie)}</span>
         </p>

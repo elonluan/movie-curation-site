@@ -72,6 +72,7 @@ export function createMovieCard(
   const scoreLabel = getScoreLabel(scoreMode);
   const watchDate = formatWatchDate(movie.watchDate);
   const meta = `${scoreLabel} ${score.toFixed(1)} · 观影日期 ${watchDate}`;
+  const logline = String(movie.logline || "").trim();
 
   const a = document.createElement("a");
   a.href = `/movie.html?id=${encodeURIComponent(movie.id)}`;
@@ -82,13 +83,14 @@ export function createMovieCard(
     </div>
     <div class="card-body">
       <h3 class="card-title">${movie.titleZh}</h3>
+      ${logline ? `<p class="card-logline">${logline}</p>` : ""}
       <p class="card-subtitle">${movie.titleOriginal}</p>
       <p class="card-year">${movie.year}</p>
       <p class="card-meta">${meta}</p>
       <div class="tag-row">
         ${movie.tags.slice(0, 3).map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </div>
-      ${withIntro ? `<p class="card-subtitle" style="margin-top: 12px;">${movie.logline}</p>` : ""}
+      ${withIntro && !logline ? `<p class="card-subtitle" style="margin-top: 12px;">${movie.logline}</p>` : ""}
     </div>
   `;
   return a;
