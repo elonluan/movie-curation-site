@@ -7,17 +7,26 @@ const MODES = [
   { key: "external", label: "外部维度" }
 ];
 
+const TIME_FILTERS = [
+  { key: "12m", label: "最近一年", months: 12 },
+  { key: "6m", label: "最近六个月", months: 6 },
+  { key: "3m", label: "最近三个月", months: 3 },
+  { key: "1m", label: "最近一个月", months: 1 }
+];
+
 const SCORE_BANDS = [
   { key: "90", label: "90-100 分", kicker: "高分区", min: 90 },
   { key: "80", label: "80-89 分", kicker: "核心区", min: 80 },
   { key: "70", label: "70-79 分", kicker: "稳态区", min: 70 },
-  { key: "0", label: "70 分以下", kicker: "观察区", min: 0 }
+  { key: "60", label: "60-69 分", kicker: "低分区", min: 60 },
+  { key: "0", label: "60 分以下", kicker: "极低分区", min: 0 }
 ];
 
 const state = {
   movies: [],
   mode: "final",
-  activeTag: "全部"
+  activeTag: "全部",
+  activeTime: "12m"
 };
 
 function safe(value) {
@@ -117,7 +126,10 @@ function tierByScore(score) {
   if (score >= 70) {
     return "B";
   }
-  return "C";
+  if (score >= 60) {
+    return "C";
+  }
+  return "F";
 }
 
 function bandKeyByScore(score) {
@@ -129,6 +141,9 @@ function bandKeyByScore(score) {
   }
   if (score >= 70) {
     return "70";
+  }
+  if (score >= 60) {
+    return "60";
   }
   return "0";
 }
@@ -210,13 +225,54 @@ function renderTagBar() {
   });
 }
 
+function renderTimeBar() {
+  const bar = document.querySelector("#score-time-filter-bar");
+  bar.innerHTML = "";
+
+  TIME_FILTERS.forEach((item) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "filter-btn";
+    button.classList.toggle("active", state.activeTime === item.key);
+    button.textContent = item.label;
+
+    button.addEventListener("click", () => {
+      state.activeTime = item.key;
+      renderTimeBar();
+      renderLeaderboard();
+    });
+
+    bar.append(button);
+  });
+}
+
+function calcCutoffTs(filterKey) {
+  const selected = TIME_FILTERS.find((item) => item.key === filterKey);
+  if (!selected) {
+    return Number.NEGATIVE_INFINITY;
+  }
+
+  const now = new Date();
+  const cutoff = new Date(now);
+  cutoff.setMonth(cutoff.getMonth() - selected.months);
+  cutoff.setHours(0, 0, 0, 0);
+  return cutoff.getTime();
+}
+
 function buildFiltered() {
+  const cutoffTs = calcCutoffTs(state.activeTime);
+
   const filtered =
     state.activeTag === "全部"
       ? [...state.movies]
       : state.movies.filter((movie) => (Array.isArray(movie.tags) ? movie.tags : []).includes(state.activeTag));
 
-  filtered.sort((a, b) => {
+  const withTime = filtered.filter((movie) => {
+    const ts = watchTs(movie);
+    return Number.isFinite(ts) && ts >= cutoffTs;
+  });
+
+  withTime.sort((a, b) => {
     const diff = scoreOf(b, state.mode) - scoreOf(a, state.mode);
     if (diff !== 0) {
       return diff;
@@ -230,25 +286,7 @@ function buildFiltered() {
     return watchTs(b) - watchTs(a);
   });
 
-  return filtered;
-}
-
-function renderSummary(list) {
-  const summary = document.querySelector("#score-summary");
-
-  if (!list.length) {
-    summary.innerHTML = "";
-    return;
-  }
-
-  const top = list[0];
-  const topScore = scoreOf(top, state.mode);
-
-  summary.innerHTML = `
-    <p class="score-summary-kicker">Ranking Rule</p>
-    <h2 class="score-summary-title">当前榜单按「${modeLabel(state.mode)}」从高到低排列</h2>
-    <p class="score-summary-text">最终分规则固定为 max(个人, 艺术, 外部)。当前共 ${list.length} 部，榜首《${top.titleZh}》得分 ${formatScore(topScore)}。</p>
-  `;
+  return withTime;
 }
 
 function renderTopCards(list) {
@@ -373,10 +411,9 @@ function renderBandSections(buckets, rankMap) {
 function renderLeaderboard() {
   const mount = document.querySelector("#score-leaderboard");
   const list = buildFiltered();
-  renderSummary(list);
 
   if (!list.length) {
-    mount.innerHTML = `<div class="empty">当前标签下暂无可展示的电影。</div>`;
+    mount.innerHTML = `<div class="empty">当前标签与时间筛选下暂无可展示的电影。</div>`;
     return;
   }
 
@@ -426,6 +463,7 @@ async function init() {
 
     renderModeBar();
     renderTagBar();
+    renderTimeBar();
     renderLeaderboard();
   } catch (error) {
     console.error(error);

@@ -721,6 +721,10 @@ img {
   margin-top: -8px;
 }
 
+#score-time-filter-bar {
+  margin-top: -8px;
+}
+
 .score-summary-note {
   margin: 0 8px 18px;
   padding: 15px 16px 13px;
@@ -1077,6 +1081,11 @@ img {
 
 .score-rank-tier.tier-C {
   border-color: rgba(199, 181, 218, 0.54);
+}
+
+.score-rank-tier.tier-F {
+  border-color: rgba(206, 132, 132, 0.6);
+  color: rgba(247, 220, 220, 0.96);
 }
 
 .score-rank-meta {
